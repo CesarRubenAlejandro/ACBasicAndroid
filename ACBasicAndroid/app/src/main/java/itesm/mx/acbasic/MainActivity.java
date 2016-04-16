@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
                     dirProcedimientos = parser.getDirProcedimientos();
                     matrizCuadruplos = parser.getMatrizCuadruplos();
                     contadorCuadruplo = parser.getContadorCuadruplo();
-                    System.out.println("CUADRUPLOS: " + contadorCuadruplo);
                     for (int i=0; i<contadorCuadruplo; i++) {
                         System.out.println(i + ": " + matrizCuadruplos[i][0] + " " + matrizCuadruplos[i][1] + " "
                                 + matrizCuadruplos[i][2] + " " + matrizCuadruplos[i][3]);
