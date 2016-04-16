@@ -11,11 +11,16 @@ import android.widget.EditText;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import itesm.mx.acbasic.Data.DirectorioProcedimientos;
+
 
 public class MainActivity extends AppCompatActivity {
     private Button bttnCompilar;
     private EditText codigoET;
     private ACBasic parser;
+    private int[][] matrizCuadruplos;
+    private int contadorCuadruplo;
+    private DirectorioProcedimientos dirProcedimientos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,15 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     parser.init();
                     parser.prog();
-                    System.out.println("OK");
+                    System.out.println("Parser OK");
+                    dirProcedimientos = parser.getDirProcedimientos();
+                    matrizCuadruplos = parser.getMatrizCuadruplos();
+                    contadorCuadruplo = parser.getContadorCuadruplo();
+                    System.out.println("CUADRUPLOS: " + contadorCuadruplo);
+                    for (int i=0; i<contadorCuadruplo; i++) {
+                        System.out.println(i + ": " + matrizCuadruplos[i][0] + " " + matrizCuadruplos[i][1] + " "
+                                + matrizCuadruplos[i][2] + " " + matrizCuadruplos[i][3]);
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

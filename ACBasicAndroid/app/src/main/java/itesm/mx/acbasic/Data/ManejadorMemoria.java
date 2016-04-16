@@ -23,6 +23,13 @@ public class ManejadorMemoria {
 	private static int contadorCteString = 14000;
 	private static int contadorCteBool = 15000;
 	
+	// variables globales
+	private static int contadorGlobalInt = 16000;
+	private static int contadorGlobalFloat = 17000;
+	private static int contadorGlobalChar = 18000;
+	private static int contadorGlobalString = 19000;
+	private static int contadorGlobalBool = 20000;
+	
 	public static int getMemoria(int tipoVariable) {
 		switch (tipoVariable) {
 		case Codigos.INT:
@@ -40,6 +47,28 @@ public class ManejadorMemoria {
 		case Codigos.BOOL:
 			contadorBool++;
 			return contadorBool-1;
+		default:
+			return 0;
+		}	
+	}
+	
+	public static int getMemoriaGlobal(int tipoVariable) {
+		switch (tipoVariable) {
+		case Codigos.INT:
+			contadorGlobalInt++;
+			return contadorGlobalInt-1;
+		case Codigos.FLOAT:
+			contadorGlobalFloat++;
+			return contadorGlobalFloat-1;
+		case Codigos.CHAR:
+			contadorGlobalChar++;
+			return contadorGlobalChar-1;
+		case Codigos.STRING:
+			contadorGlobalString++;
+			return contadorGlobalString-1;
+		case Codigos.BOOL:
+			contadorGlobalBool++;
+			return contadorGlobalBool-1;
 		default:
 			return 0;
 		}	

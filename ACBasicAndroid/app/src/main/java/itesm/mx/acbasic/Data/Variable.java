@@ -24,7 +24,11 @@ public class Variable {
 		this.nombreVariable = nombreVariable;
 		this.tipoVariable = tipoVariable;
 		this.scope = scope;
-		this.direccionVariable = ManejadorMemoria.getMemoria(tipoVariable);
+		if (this.scope.equals("global")){
+			this.direccionVariable = ManejadorMemoria.getMemoriaGlobal(tipoVariable);
+		} else {
+			this.direccionVariable = ManejadorMemoria.getMemoria(tipoVariable);
+		}
 	}
 	
 	public String getNombreVariable() {
