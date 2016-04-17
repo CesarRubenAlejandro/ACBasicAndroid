@@ -111,4 +111,37 @@ public class Registro {
     public void setTemporalesBool(HashMap<Integer, Boolean> temporalesBool) {
         this.temporalesBool = temporalesBool;
     }
+
+    public void guardaValor (int dirGuardar, String valor) {
+        if(ManejadorMemoria.isVarInt(dirGuardar)) {
+            this.variablesInt.put(dirGuardar, Integer.parseInt(valor));
+
+        } else if(ManejadorMemoria.isVarFloat(dirGuardar)) {
+            this.variablesFloat.put(dirGuardar, Double.parseDouble(valor));
+
+        } else if(ManejadorMemoria.isVarChar(dirGuardar)) {
+            this.variablesChar.put(dirGuardar, valor.charAt(0));
+
+        } else if(ManejadorMemoria.isVarString(dirGuardar)) {
+            this.variablesString.put(dirGuardar, valor);
+
+        } else if(ManejadorMemoria.isVarBool(dirGuardar)) {
+            this.variablesBool.put(dirGuardar, Boolean.parseBoolean(valor));
+
+        } else if(ManejadorMemoria.isTempInt(dirGuardar)) {
+            this.temporalesInt.put(dirGuardar, Integer.parseInt(valor));
+
+        } else if(ManejadorMemoria.isTempFloat(dirGuardar)) {
+            this.temporalesFloat.put(dirGuardar, Double.parseDouble(valor));
+
+        } else if(ManejadorMemoria.isTempChar(dirGuardar)) {
+            this.temporalesChar.put(dirGuardar, valor.charAt(0));
+
+        } else if(ManejadorMemoria.isTempString(dirGuardar)) {
+            this.temporalesString.put(dirGuardar, valor);
+
+        } else if(ManejadorMemoria.isTempBool(dirGuardar)) {
+            this.temporalesBool.put(dirGuardar, Boolean.parseBoolean(valor));
+        }
+    }
 }

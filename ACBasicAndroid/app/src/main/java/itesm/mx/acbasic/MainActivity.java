@@ -7,20 +7,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Stack;
 
+import itesm.mx.acbasic.Data.Codigos;
 import itesm.mx.acbasic.Data.DirectorioProcedimientos;
+import itesm.mx.acbasic.Data.MaquinaVirtual;
 
 
 public class MainActivity extends AppCompatActivity {
     private Button bttnCompilar;
     private EditText codigoET;
+    private TextView outputTV;
+    private EditText inputBoxET;
     private ACBasic parser;
+
     private int[][] matrizCuadruplos;
-    private int contadorCuadruplo;
+    private int instructionPointer;
     private DirectorioProcedimientos dirProcedimientos;
+    private Stack<Integer> pilaInstrucciones;
+    private MaquinaVirtual maquinaVirtual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bttnCompilar = (Button) findViewById(R.id.button);
-        codigoET = (EditText) findViewById(R.id.editText);
+        codigoET = (EditText) findViewById(R.id.codigoEntrada);
+        outputTV = (TextView) findViewById(R.id.output);
+        inputBoxET = (EditText) findViewById(R.id.inputBox);
 
         bttnCompilar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,11 +57,9 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("Parser OK");
                     dirProcedimientos = parser.getDirProcedimientos();
                     matrizCuadruplos = parser.getMatrizCuadruplos();
-                    contadorCuadruplo = parser.getContadorCuadruplo();
-                    for (int i=0; i<contadorCuadruplo; i++) {
-                        System.out.println(i + ": " + matrizCuadruplos[i][0] + " " + matrizCuadruplos[i][1] + " "
-                                + matrizCuadruplos[i][2] + " " + matrizCuadruplos[i][3]);
-                    }
+                    instructionPointer = 0;
+                    pilaInstrucciones = new Stack<Integer>();
+                    maquinaVirtual = new MaquinaVirtual(dirProcedimientos);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -79,5 +88,38 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void ejecutar () {
+        while (instructionPointer < matrizCuadruplos.length) {
+            switch (matrizCuadruplos[instructionPointer][0]) {
+                case Codigos.SUMA:
+                    maquinaVirtual.suma(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
+                    break;
+                case Codigos.RESTA:
+                    maquinaVirtual.resta(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
+                    break;
+                case Codigos.MULT:
+                    maquinaVirtual.multiplica(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
+                    break;
+                case Codigos.DIV:
+                    maquinaVirtual.divide(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
+                    break;
+                case Codigos.ASSIGN:
+                    maquinaVirtual.asigna(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][3]);
+                    break;
+
+            }
+            instructionPointer++;
+        }
     }
 }
