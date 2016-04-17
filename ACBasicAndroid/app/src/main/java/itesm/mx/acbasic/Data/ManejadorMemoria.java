@@ -118,6 +118,26 @@ public class ManejadorMemoria {
 		}	
 	}
 
+	public static boolean isInt(int dir){
+		return isVarInt(dir) || isTempInt(dir);
+	}
+
+	public static boolean isFloat(int dir){
+		return isVarFloat(dir) || isTempFloat(dir);
+	}
+
+	public static boolean isChar(int dir){
+		return isVarChar(dir) || isTempChar(dir);
+	}
+
+	public static boolean isString(int dir){
+		return isVarString(dir) || isTempString(dir);
+	}
+
+	public static boolean isBool(int dir){
+		return isVarBool(dir) || isTempBool(dir);
+	}
+
 	public static boolean isGlobal(int dir) {
 		return (dir >= 16000 && dir < 21000);
 	}
