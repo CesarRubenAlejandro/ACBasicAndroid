@@ -16,6 +16,9 @@ public class MaquinaVirtual {
         registroGlobal = new Registro();
         pilaRegistros = new Stack<Registro>();
         valorRetorno = "";
+
+        // SOLO PARA PROBAR
+        pilaRegistros.push(new Registro()); // registro main
     }
 
     private String auxOperacion(int operando1, int operando2, String valor1, String valor2, int op){
@@ -381,10 +384,13 @@ public class MaquinaVirtual {
     public void asigna (int dirValor, int dirAsigna) {
         // Caso en que se asigna a una variable global
         if(ManejadorMemoria.isGlobal(dirAsigna)) {
-            // caso en que se global = cte
+            // caso en que global = cte
             if (ManejadorMemoria.isConstante(dirValor)){
                 String valorCte = directorioProcedimientos.getConstantes()
                         .get(dirValor).getValorConstante();
+                this.registroGlobal.guardaValor(dirAsigna, valorCte);
+            } else if(ManejadorMemoria.isGlobal(dirValor)){ // caso en que global = global
+                String valorCte = this.registroGlobal.getValor(dirValor);
                 this.registroGlobal.guardaValor(dirAsigna, valorCte);
             } else { // caso en que global = local
                 String valor = this.pilaRegistros.peek().getValor(dirValor);
@@ -402,6 +408,14 @@ public class MaquinaVirtual {
                 String valor = this.pilaRegistros.peek().getValor(dirValor);
                 this.pilaRegistros.peek().guardaValor(dirAsigna,valor);
             }
+        }
+    }
+
+    public void imprime(int direccionValor){
+        if (ManejadorMemoria.isGlobal(direccionValor)){
+            System.out.println(this.registroGlobal.getValor(direccionValor));
+        } else {
+            System.out.println(this.pilaRegistros.peek().getValor(direccionValor));
         }
     }
 

@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     instructionPointer = 0;
                     pilaInstrucciones = new Stack<Integer>();
                     maquinaVirtual = new MaquinaVirtual(dirProcedimientos);
+                    ejecutar();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -92,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void ejecutar () {
         while (instructionPointer < matrizCuadruplos.length) {
+            System.out.println(instructionPointer + ":" + matrizCuadruplos[instructionPointer][0] + " "
+                    + matrizCuadruplos[instructionPointer][1] + " " + matrizCuadruplos[instructionPointer][2] + " "
+                    + matrizCuadruplos[instructionPointer][3] + " ");
+
             switch (matrizCuadruplos[instructionPointer][0]) {
                 case Codigos.SUMA:
                     maquinaVirtual.suma(matrizCuadruplos[instructionPointer][1],
@@ -117,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
                     maquinaVirtual.asigna(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][3]);
                     break;
+
+                case Codigos.PRINT:
+                    maquinaVirtual.imprime(matrizCuadruplos[instructionPointer][3]);
 
             }
             instructionPointer++;

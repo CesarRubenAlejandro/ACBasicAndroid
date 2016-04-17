@@ -205,7 +205,7 @@ public class ACBasic implements ACBasicConstants {
             {if (true) return dirProcedimientos.getConstantes().get(valor.toString());}
         } else {
             Constante auxiliar = new Constante(tipo, ManejadorMemoria.getMemoriaConstante(tipo) , valor.toString());
-            dirProcedimientos.getConstantes().put(valor.toString(), auxiliar);
+            dirProcedimientos.getConstantes().put(auxiliar.getDireccionConstante(), auxiliar);
             {if (true) return auxiliar;}
         }
         throw new Error("Missing return statement in function");
@@ -1638,3 +1638,4 @@ public class ACBasic implements ACBasicConstants {
     }
 
 }
+
