@@ -119,23 +119,23 @@ public class ManejadorMemoria {
 	}
 
 	public static boolean isInt(int dir){
-		return isVarInt(dir) || isTempInt(dir);
+		return isVarInt(dir) || isTempInt(dir) || isConsInt(dir);
 	}
 
 	public static boolean isFloat(int dir){
-		return isVarFloat(dir) || isTempFloat(dir);
+		return isVarFloat(dir) || isTempFloat(dir) || isConsFloat(dir);
 	}
 
 	public static boolean isChar(int dir){
-		return isVarChar(dir) || isTempChar(dir);
+		return isVarChar(dir) || isTempChar(dir) || isConsChar(dir);
 	}
 
 	public static boolean isString(int dir){
-		return isVarString(dir) || isTempString(dir);
+		return isVarString(dir) || isTempString(dir) || isConsString(dir);
 	}
 
 	public static boolean isBool(int dir){
-		return isVarBool(dir) || isTempBool(dir);
+		return isVarBool(dir) || isTempBool(dir) || isConsBool(dir);
 	}
 
 	public static boolean isGlobal(int dir) {
@@ -173,5 +173,21 @@ public class ManejadorMemoria {
 	}
 	public static boolean isTempBool (int dir) {
 		return (dir >= 10000 && dir < 11000);
+	}
+
+	public static boolean isConsInt (int dir) {
+		return (dir >= 11000 && dir < 12000);
+	}
+	public static boolean isConsFloat (int dir) {
+		return (dir >= 12000 && dir < 13000);
+	}
+	public static boolean isConsChar (int dir) {
+		return (dir >= 13000 && dir < 14000);
+	}
+	public static boolean isConsString (int dir) {
+		return (dir >= 14000 && dir < 15000);
+	}
+	public static boolean isConsBool (int dir) {
+		return (dir >= 15000 && dir < 16000);
 	}
 }

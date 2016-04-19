@@ -202,7 +202,7 @@ public class ACBasic implements ACBasicConstants {
         // agregar la constante al directorio de procedimientos si esta no existe ya
 
         if(dirProcedimientos.existeConstante(valor.toString())) {
-            {if (true) return dirProcedimientos.getConstantes().get(valor.toString());}
+            {if (true) return dirProcedimientos.getConstantePorValor(valor.toString());}
         } else {
             Constante auxiliar = new Constante(tipo, ManejadorMemoria.getMemoriaConstante(tipo) , valor.toString());
             dirProcedimientos.getConstantes().put(auxiliar.getDireccionConstante(), auxiliar);

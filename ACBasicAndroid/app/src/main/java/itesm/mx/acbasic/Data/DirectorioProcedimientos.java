@@ -89,6 +89,15 @@ public class DirectorioProcedimientos {
 		return false;
 	}
 
+	public Constante getConstantePorValor(String valorConstante){
+		for (Integer key: this.constantes.keySet()){
+			if (this.constantes.get(key).getValorConstante().equals(valorConstante)){
+				return this.constantes.get(key);
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Metodo para obtener una variable si es que existe
 	 * @param nombreProcActual
