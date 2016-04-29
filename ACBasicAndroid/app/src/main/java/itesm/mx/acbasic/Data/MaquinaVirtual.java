@@ -21,6 +21,34 @@ public class MaquinaVirtual {
         pilaRegistros.push(new Registro()); // registro main
     }
 
+    /**
+     * Metodo para traducir una direccion que pueda contener la direccion a una casilla
+     * de un arrego (direccionamiento indirecto)
+     * @param direccion direccion a revisar
+     * @return direccion a utilizar
+     */
+    private int traduceDirIndirecto(int direccion) {
+        if(direccion < 0) {
+            direccion = direccion * (-1);
+            if(ManejadorMemoria.isGlobal(direccion)) {
+                return Integer.parseInt(registroGlobal.getValor(direccion));
+            } else {
+                return Integer.parseInt(pilaRegistros.peek().getValor(direccion));
+            }
+        } else {
+            return direccion;
+        }
+    }
+
+    /**
+     * Metodo para realizar una operacion aritmetica entre dos operandos
+     * @param operando1 direccion del operando 1
+     * @param operando2 direccion del operando 2
+     * @param valor1 valor del operando 1
+     * @param valor2 valor del operando 2
+     * @param op codigo del operador aritmetico
+     * @return resultado de la operacion aritmetica
+     */
     private String auxOperacion(int operando1, int operando2, String valor1, String valor2, int op){
         if (ManejadorMemoria.isInt(operando1)){
             if (ManejadorMemoria.isInt(operando2)){
@@ -78,6 +106,9 @@ public class MaquinaVirtual {
     }
 
     public void suma (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
         if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
             String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
             if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
@@ -154,6 +185,9 @@ public class MaquinaVirtual {
     }
 
     public void resta (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
         if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
             String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
             if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
@@ -230,6 +264,9 @@ public class MaquinaVirtual {
     }
 
     public void multiplica (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
         if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
             String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
             if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
@@ -306,6 +343,9 @@ public class MaquinaVirtual {
     }
 
     public void divide (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
         if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
             String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
             if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
@@ -381,7 +421,15 @@ public class MaquinaVirtual {
         }
     }
 
+    /**
+     * Metodo para asignar un valor a una direccion
+     * @param dirValor direccion del valor a ser asignado
+     * @param dirAsigna direccion a la cual se asigna el valor
+     */
     public void asigna (int dirValor, int dirAsigna) {
+        //traduce casos de direccionamiento indirecto
+        dirValor = traduceDirIndirecto(dirValor);
+        dirAsigna = traduceDirIndirecto(dirAsigna);
         // Caso en que se asigna a una variable global
         if(ManejadorMemoria.isGlobal(dirAsigna)) {
             // caso en que global = cte
