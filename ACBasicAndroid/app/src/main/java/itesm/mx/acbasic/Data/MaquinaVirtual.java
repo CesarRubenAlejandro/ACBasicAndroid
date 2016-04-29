@@ -1,5 +1,7 @@
 package itesm.mx.acbasic.Data;
 
+import android.util.MalformedJsonException;
+
 import java.util.Stack;
 
 /**
@@ -460,11 +462,56 @@ public class MaquinaVirtual {
     }
 
     public void imprime(int direccionValor){
+        //traduce casos de direccionamiento indirecto
+        direccionValor = traduceDirIndirecto(direccionValor);
         if (ManejadorMemoria.isGlobal(direccionValor)){
             System.out.println(this.registroGlobal.getValor(direccionValor));
         } else {
             System.out.println(this.pilaRegistros.peek().getValor(direccionValor));
         }
+    }
+
+    /**
+     * Metodo para verificar que una expresion de indexamiento no supere los limites de casillas de un arreglo
+     * @param direccionValor es la direccion de memoria donde se encuentra el valor del indexamiento
+     * @param limite es la cantidad de casillas del arreglo
+     */
+    public void verifica(int direccionValor, int limite){
+        String valorIndex;
+        // obtener el valor dentro de la direccion recibida
+        if (ManejadorMemoria.isGlobal(direccionValor)){
+            valorIndex = this.registroGlobal.getValor(direccionValor);
+        } else if (ManejadorMemoria.isConstante(direccionValor)){
+            valorIndex = this.directorioProcedimientos.getConstantes().get(direccionValor).getValorConstante();
+        } else {
+           valorIndex =  this.pilaRegistros.peek().getValor(direccionValor);
+        }
+        // revisar que el valor no sobrepase el limite del arreglo
+        if (Integer.parseInt(valorIndex) >= limite) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+    }
+
+    /**
+     * Metodo para realizar la suma de la direccion base del arreglo con el resultado de la expresion de indexamiento.
+     * El resultado se guarda en un valor temporal
+     * @param direccionValorIndex es la direccion local o global donde esta el resultado de la expresion de indexamiento
+     * @param direccionBase es la direccion base del arreglo
+     * @param direccionResultadoOffset es la direccion del temporal donde se guardara la direccion de la casilla accesada del arreglo
+     */
+    public void sumaOffset(int direccionValorIndex, int direccionBase, int direccionResultadoOffset){
+        String valorIndex;
+        // obtener el valor dentro de la direccion recibida
+        if (ManejadorMemoria.isGlobal(direccionValorIndex)){
+            valorIndex = this.registroGlobal.getValor(direccionValorIndex);
+        }else if (ManejadorMemoria.isConstante(direccionValorIndex)){
+            valorIndex = this.directorioProcedimientos.getConstantes().get(direccionValorIndex).getValorConstante();
+        } else {
+            valorIndex =  this.pilaRegistros.peek().getValor(direccionValorIndex);
+        }
+        // sumar la expresion de indexamiento con la direccion base y guardarlo en el mapa de memoria local
+        String direccionMemoriaCasilla = (direccionBase + Integer.parseInt(valorIndex)) + "";
+        this.pilaRegistros.peek().guardaValor(direccionResultadoOffset,direccionMemoriaCasilla);
     }
 
 }

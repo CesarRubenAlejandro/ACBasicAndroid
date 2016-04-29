@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private DirectorioProcedimientos dirProcedimientos;
     private Stack<Integer> pilaInstrucciones;
     private MaquinaVirtual maquinaVirtual;
+    private int contadorCuadruplos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("Parser OK");
                     dirProcedimientos = parser.getDirProcedimientos();
                     matrizCuadruplos = parser.getMatrizCuadruplos();
+                    contadorCuadruplos = parser.getContadorCuadruplo();
                     instructionPointer = 0;
                     pilaInstrucciones = new Stack<Integer>();
                     maquinaVirtual = new MaquinaVirtual(dirProcedimientos);
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ejecutar () {
-        while (instructionPointer < matrizCuadruplos.length) {
+        while (instructionPointer < contadorCuadruplos) {
             System.out.println(instructionPointer + ":" + matrizCuadruplos[instructionPointer][0] + " "
                     + matrizCuadruplos[instructionPointer][1] + " " + matrizCuadruplos[instructionPointer][2] + " "
                     + matrizCuadruplos[instructionPointer][3] + " ");
@@ -125,6 +127,15 @@ public class MainActivity extends AppCompatActivity {
 
                 case Codigos.PRINT:
                     maquinaVirtual.imprime(matrizCuadruplos[instructionPointer][3]);
+                    break;
+
+                case Codigos.VERIFICAR:
+                    maquinaVirtual.verifica(matrizCuadruplos[instructionPointer][1],matrizCuadruplos[instructionPointer][3]);
+                    break;
+
+                case Codigos.SUMAOFFSET:
+                    maquinaVirtual.sumaOffset(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][2], matrizCuadruplos[instructionPointer][3]);
+                    break;
 
             }
             instructionPointer++;
