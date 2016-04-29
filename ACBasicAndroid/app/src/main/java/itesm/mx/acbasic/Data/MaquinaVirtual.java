@@ -3,7 +3,7 @@ package itesm.mx.acbasic.Data;
 import java.util.Stack;
 
 /**
- * Created by Cesar on 4/16/2016.
+ * Created by Cesar, Angela on 4/16/2016.
  */
 public class MaquinaVirtual {
     private DirectorioProcedimientos directorioProcedimientos;

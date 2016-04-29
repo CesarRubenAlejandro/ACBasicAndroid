@@ -88,7 +88,22 @@ public class ACBasic implements ACBasicConstants {
                 System.out.println("Error: Procedimiento con incorrecto tipo de retorno en:" + detail);
                 System.exit(0);
                 break;
-
+            case 11:
+                System.out.println("Error: Tama\u00f1o del procedimiento imposible:" + detail);
+                System.exit(0);
+                break;
+            case 12:
+                System.out.println("Error: Index del arreglo no es entero:" + detail);
+                System.exit(0);
+                break;
+            case 13:
+                System.out.println("Error: Constante de tipo diferente al arreglo:" + detail);
+                System.exit(0);
+                break;
+            case 14:
+                System.out.println("Error: Tama\u00f1o incorrecto en la declaracion del arreglo:" + detail);
+                System.exit(0);
+                break;
         }
     }
 
@@ -211,9 +226,19 @@ public class ACBasic implements ACBasicConstants {
         throw new Error("Missing return statement in function");
     }
 
-    static final public void defarr() throws ParseException {
+    static final public void defarr(Variable arreglo) throws ParseException {
+        Constante auxCte;
+        //Lista para guardar los valores de cada casilla del arreglo
+        ArrayList < Constante > auxListaCte = new ArrayList < Constante > ();
         jj_consume_token(CORIZQ);
-        cte();
+        auxCte = cte();
+        if(auxCte.getTipoConstante() == arreglo.getTipoVariable()){
+            //guardar valor
+            auxListaCte.add(auxCte);
+        } else {
+            //ERROR
+            errorHandler(13,arreglo.getNombreVariable());
+        }
         label_2:
         while (true) {
             switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -225,9 +250,31 @@ public class ACBasic implements ACBasicConstants {
                     break label_2;
             }
             jj_consume_token(COMA);
-            cte();
+            auxCte = cte();
+            if(auxCte.getTipoConstante() == arreglo.getTipoVariable()){
+                //guardar valor
+                auxListaCte.add(auxCte);
+            } else {
+                //ERROR
+                errorHandler(13,arreglo.getNombreVariable());
+            }
         }
         jj_consume_token(CORDER);
+        if(auxListaCte.size() != arreglo.getSizeVariable())
+        {
+            //ERROR
+            errorHandler(14,arreglo.getNombreVariable());
+        } else
+        {
+            for (int i = 0; i < arreglo.getSizeVariable(); i++){
+                //generar cuadruplo
+                matrizCuadruplos[contadorCuadruplo][0] = Codigos.ASSIGN;
+                matrizCuadruplos[contadorCuadruplo][1] = auxListaCte.get(i).getDireccionConstante();
+                matrizCuadruplos[contadorCuadruplo][2] = Codigos.NULO;
+                matrizCuadruplos[contadorCuadruplo][3] = arreglo.getDireccionVariable() + i;
+                contadorCuadruplo++;
+            }
+        }
     }
 
     static final public void vars() throws ParseException {
@@ -363,37 +410,38 @@ public class ACBasic implements ACBasicConstants {
     }
 
     static final public void vars3() throws ParseException {
-        int tipoArreglo; Token nombreArreglo;
+        int tipoArreglo; Token nombreArreglo; Token size;
         jj_consume_token(ARRAY);
-        // crear objeto variable
-        Variable auxArreglo = new Variable();
         tipoArreglo = tipo();
-        // guardar el tipo de variable
-        auxArreglo.setTipoVariable(tipoArreglo);
         nombreArreglo = jj_consume_token(ID);
-        // guardar el nombre de la variable
-        auxArreglo.setNombreVariable(nombreArreglo.toString());
-
         // definir el scope de la variable
         String scope = "local";
-        if(procedimientoActual.equals("program")){
+        if(dirProcedimientos.getProcedimientos().get(procedimientoActual).getTipoProcedimiento() == Codigos.PROGRAM){
             // unicamente si el procedimiento actual es program, el scope de la variable es global
             scope = "global";
         }
-        auxArreglo.setScope(scope);
+        Variable auxArreglo = new Variable(nombreArreglo.toString(),tipoArreglo, scope);
+        jj_consume_token(CORIZQ);
+        size = jj_consume_token(CTEI);
+        //Revisar size mayor a 0
+        if(Integer.parseInt(size.toString()) > 0) {
+            auxArreglo.setSizeVariable(Integer.parseInt(size.toString()));
+        } else {
+            //Error
+            errorHandler(11,nombreArreglo.toString());
+        }
 
         // dar de alta la variable en el directorio de variables del procedimiento actual
         if(!dirProcedimientos.getProcedimientos().get(procedimientoActual).agregarVariable(auxArreglo)){
             // si ya existe una variable con ese nombre, reportar error
             errorHandler(2,nombreArreglo.toString());
         }
-        jj_consume_token(CORIZQ);
-        jj_consume_token(CTEI);
+        System.out.println(auxArreglo.getNombreVariable() + " " + auxArreglo.getSizeVariable());
         jj_consume_token(CORDER);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
             case IGUAL:
                 jj_consume_token(IGUAL);
-                defarr();
+                defarr(auxArreglo);
                 break;
             default:
                 jj_la1[10] = jj_gen;
@@ -674,11 +722,35 @@ public class ACBasic implements ACBasicConstants {
         }
     }
 
-    static final public void assign() throws ParseException {
+    static final public void assign(Variable varArreglo) throws ParseException {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
             case CORIZQ:
                 jj_consume_token(CORIZQ);
                 exp();
+                int tipoIndex = pilaTipos.pop();
+                int valorIndex = pilaOperandos.pop();
+
+                if(tipoIndex != Codigos.INT){
+                    //Error
+                    errorHandler(12,varArreglo.getNombreVariable());
+                } else {
+                    // generar cuadruplo VERIFICA
+                    matrizCuadruplos[contadorCuadruplo][0] = Codigos.VERIFICAR;
+                    matrizCuadruplos[contadorCuadruplo][1] = valorIndex;
+                    matrizCuadruplos[contadorCuadruplo][2] = Codigos.NULO;
+                    matrizCuadruplos[contadorCuadruplo][3] = varArreglo.getSizeVariable();
+                    contadorCuadruplo++;
+                    // GENERAR CUADRUPLO DE SUMA OFFSET + DIRBASE
+                    int direccionResArr = ManejadorMemoria.getMemoriaTemporal(varArreglo.getTipoVariable());
+                    matrizCuadruplos[contadorCuadruplo][0] = Codigos.SUMAOFFSET;
+                    matrizCuadruplos[contadorCuadruplo][1] = valorIndex;
+                    matrizCuadruplos[contadorCuadruplo][2] = varArreglo.getDireccionVariable();
+                    matrizCuadruplos[contadorCuadruplo][3] = direccionResArr;
+                    contadorCuadruplo++;
+                    // GUARDAR LA DIRECCION INDIRECTA COMO NUMERO NEGATIVO
+                    pilaOperandos.push(direccionResArr *  -1);
+                    pilaTipos.push(varArreglo.getTipoVariable());
+                }
                 jj_consume_token(CORDER);
                 break;
             default:
@@ -977,6 +1049,8 @@ public class ACBasic implements ACBasicConstants {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
             case NEGACION:
                 jj_consume_token(NEGACION);
+                // agregar el NOT a la pila de operadores
+                pilaOperadores.push(Codigos.NOT);
                 break;
             default:
                 jj_la1[31] = jj_gen;
@@ -1001,6 +1075,29 @@ public class ACBasic implements ACBasicConstants {
                 jj_la1[32] = jj_gen;
                 jj_consume_token(-1);
                 throw new ParseException();
+        }
+        // si el tope de la pila de operadores es NOT, generar cuadruplo
+
+        if (!pilaOperadores.isEmpty()){
+            if (pilaOperadores.peek()==Codigos.NOT) {
+                int operador = pilaOperadores.pop();
+                int operando = pilaOperandos.pop();
+                int tipo = pilaTipos.pop();
+                if (tipo == Codigos.BOOL) {
+                    // generar cuadruplo
+                    matrizCuadruplos[contadorCuadruplo][0] = operador;
+                    matrizCuadruplos[contadorCuadruplo][1] = operando;
+                    matrizCuadruplos[contadorCuadruplo][2] = Codigos.NULO;
+                    int direccionRes = ManejadorMemoria.getMemoriaTemporal(tipo);
+                    matrizCuadruplos[contadorCuadruplo][3] = direccionRes;
+                    contadorCuadruplo++;
+                    //guardar resultado en pila operandos
+                    pilaOperandos.push(direccionRes);
+                    pilaTipos.push(tipo);
+                    // agregar al tamaño de procedimiento un temporal
+                    dirProcedimientos.getProcedimientos().get(procedimientoActual).getTamano().setTamanoTemp(tipo);
+                }
+            }
         }
     }
 
@@ -1028,10 +1125,14 @@ public class ACBasic implements ACBasicConstants {
         // buscar que exista el id
         Variable varActual = dirProcedimientos.obtenerVariable(procedimientoActual, id.toString());
         if ( varActual != null) {
-            // meter direccion y tipo a las pilas
-            pilaOperandos.push(varActual.getDireccionVariable());
-            pilaTipos.push(varActual.getTipoVariable());
+            //revisar que la variable no sea un arreglo
+            if(varActual.getSizeVariable() == 0){
+                // meter direccion y tipo a las pilas
+                pilaOperandos.push(varActual.getDireccionVariable());
+                pilaTipos.push(varActual.getTipoVariable());
+            }
         } else {
+            // revisar si el id es un metodo
             if (!dirProcedimientos.getProcedimientos().containsKey(id.toString())) {
                 // ERROR
                 errorHandler(4,id.toString());
@@ -1042,7 +1143,7 @@ public class ACBasic implements ACBasicConstants {
             case PARIZQ:
                 switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
                     case CORIZQ:
-                        fact4();
+                        fact4(id.toString());
                         break;
                     case PARIZQ:
                         fact5(id.toString());
@@ -1059,15 +1160,42 @@ public class ACBasic implements ACBasicConstants {
         }
     }
 
-    static final public void fact4() throws ParseException {
+    static final public void fact4(String id) throws ParseException {
         jj_consume_token(CORIZQ);
         exp();
+        int tipoIndex = pilaTipos.pop();
+        int valorIndex = pilaOperandos.pop();
+        if(tipoIndex != Codigos.INT){
+            //Error
+            errorHandler(12,id);
+        } else {
+            Variable varArreglo = dirProcedimientos.obtenerVariable(procedimientoActual, id.toString());
+            // generar cuadruplo VERIFICA
+            matrizCuadruplos[contadorCuadruplo][0] = Codigos.VERIFICAR;
+            matrizCuadruplos[contadorCuadruplo][1] = valorIndex;
+            matrizCuadruplos[contadorCuadruplo][2] = Codigos.NULO;
+            matrizCuadruplos[contadorCuadruplo][3] = varArreglo.getSizeVariable();
+            contadorCuadruplo++;
+            // GENERAR CUADRUPLO DE SUMA OFFSET + DIRBASE
+            int direccionResArr = ManejadorMemoria.getMemoriaTemporal(varArreglo.getTipoVariable());
+            matrizCuadruplos[contadorCuadruplo][0] = Codigos.SUMAOFFSET;
+            matrizCuadruplos[contadorCuadruplo][1] = valorIndex;
+            matrizCuadruplos[contadorCuadruplo][2] = varArreglo.getDireccionVariable();
+            matrizCuadruplos[contadorCuadruplo][3] = direccionResArr;
+            contadorCuadruplo++;
+            // GUARDAR LA DIRECCION INDIRECTA COMO NUMERO NEGATIVO
+            pilaOperandos.push(direccionResArr *  -1);
+            pilaTipos.push(varArreglo.getTipoVariable());
+        }
         jj_consume_token(CORDER);
     }
 
     static final public void fact5(String nombreProc) throws ParseException {
         ArrayList<Integer > argumentosParam; ArrayList<Integer > tiposParam;
         jj_consume_token(PARIZQ);
+        // agregar fondo falso
+        pilaOperadores.push(Codigos.FONDOFALSO);
+
         // generar cuadruplo ERA
         matrizCuadruplos[contadorCuadruplo][0] = Codigos.ERA;
         matrizCuadruplos[contadorCuadruplo][1] = Codigos.NULO;
@@ -1113,6 +1241,9 @@ public class ACBasic implements ACBasicConstants {
                 ;
         }
         jj_consume_token(PARDER);
+        // quitar fondo falso
+        pilaOperadores.pop();
+
         // revisar que los tipos de la llamada coincidan con los parametros de la funcion
 
         if(dirProcedimientos.getProcedimientos().get(nombreProc).comparaParams(tiposParam) ){
@@ -1135,8 +1266,8 @@ public class ACBasic implements ACBasicConstants {
 
             int tipoFuncLlamada = dirProcedimientos.getProcedimientos().get(nombreProc).getTipoProcedimiento();
             if (tipoFuncLlamada != Codigos.VOID) {
-                // generar cuadruplo de asignacion
-                matrizCuadruplos[contadorCuadruplo][0] = Codigos.ASSIGN;
+                // generar cuadruplo de asignacion especial si la funcion llamada no es void
+                matrizCuadruplos[contadorCuadruplo][0] = Codigos.ASSIGNRET;
                 matrizCuadruplos[contadorCuadruplo][1] = dirProcedimientos.getProcedimientos().get(nombreProc).getIdentificadorProcedimiento();
                 matrizCuadruplos[contadorCuadruplo][2] = Codigos.NULO;
                 matrizCuadruplos[contadorCuadruplo][3] = ManejadorMemoria.getMemoriaTemporal(tipoFuncLlamada);
@@ -1412,7 +1543,7 @@ public class ACBasic implements ACBasicConstants {
     }
 
     static final public void assignllam() throws ParseException {
-        Token id;
+        Token id; Variable varActual;
         id = jj_consume_token(ID);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
             case PARIZQ:
@@ -1421,16 +1552,18 @@ public class ACBasic implements ACBasicConstants {
             case CORIZQ:
             case IGUAL:
                 // buscar que exista el id
-                Variable varActual = dirProcedimientos.obtenerVariable(procedimientoActual, id.toString());
+                varActual = dirProcedimientos.obtenerVariable(procedimientoActual, id.toString());
                 if ( varActual == null) {
                     // ERROR
                     errorHandler(4, id.toString());
                 } else {
-                    // meter direccion y tipo a las pilas
-                    pilaOperandos.push(varActual.getDireccionVariable());
-                    pilaTipos.push(varActual.getTipoVariable());
+                    if (varActual.getSizeVariable() == 0 ){
+                        // meter direccion y tipo a las pilas si no es un arreglo
+                        pilaOperandos.push(varActual.getDireccionVariable());
+                        pilaTipos.push(varActual.getTipoVariable());
+                    }
                 }
-                assign();
+                assign(varActual);
                 break;
             default:
                 jj_la1[42] = jj_gen;
@@ -1638,4 +1771,3 @@ public class ACBasic implements ACBasicConstants {
     }
 
 }
-
