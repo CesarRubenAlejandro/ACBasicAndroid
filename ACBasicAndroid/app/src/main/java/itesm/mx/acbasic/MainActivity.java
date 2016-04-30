@@ -1,5 +1,8 @@
 package itesm.mx.acbasic;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,6 +22,9 @@ import itesm.mx.acbasic.Data.MaquinaVirtual;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE = 1;
+    private int auxiliarInstructionPointer;
+
     private Button bttnCompilar;
     private EditText codigoET;
     private TextView outputTV;
@@ -129,15 +135,42 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case Codigos.VERIFICAR:
-                    maquinaVirtual.verifica(matrizCuadruplos[instructionPointer][1],matrizCuadruplos[instructionPointer][3]);
+                    maquinaVirtual.verifica(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3]);
                     break;
 
                 case Codigos.SUMAOFFSET:
                     maquinaVirtual.sumaOffset(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][2], matrizCuadruplos[instructionPointer][3]);
                     break;
 
+                case Codigos.GOTO:
+                    instructionPointer = matrizCuadruplos[instructionPointer][3];
+                    break;
+                case Codigos.GOTOF:
+                    if (!maquinaVirtual.gotoFalso(matrizCuadruplos[instructionPointer][1])) {
+                        instructionPointer = matrizCuadruplos[instructionPointer][3];
+                    }
+                    break;
+                case Codigos.READ:
+                    // terminar la ejecucion momentaneamente mientras se lee el valor
+                    auxiliarInstructionPointer = instructionPointer;
+                    instructionPointer = contadorCuadruplos;
+                    Intent intent = new Intent(MainActivity.this, ReadActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE);
+                    break;
             }
             instructionPointer++;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode== REQUEST_CODE) && (resultCode==RESULT_OK)){
+            System.out.println("REGRESEE");
+            Bundle datos = data.getExtras();
+            maquinaVirtual.read(matrizCuadruplos[auxiliarInstructionPointer][3], datos.getString("valor"));
+            instructionPointer = auxiliarInstructionPointer + 1;
+            ejecutar();
         }
     }
 }

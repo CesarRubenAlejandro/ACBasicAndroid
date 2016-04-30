@@ -521,4 +521,31 @@ public class MaquinaVirtual {
         this.pilaRegistros.peek().guardaValor(direccionResultadoOffset,direccionMemoriaCasilla);
     }
 
+    /**
+     * Metodo que indica si se debe hacer el goto en falso
+     * @param direccionExpresion es la direccion donde se encuentra el resultado de la expresion bool
+     * @return valor bool de la expresion
+     */
+    public boolean gotoFalso(int direccionExpresion){
+        String valorExpresion;
+        // obtener el valor dentro de la direccion recibida
+        if (ManejadorMemoria.isGlobal(direccionExpresion)){
+            valorExpresion = this.registroGlobal.getValor(direccionExpresion);
+        }else if (ManejadorMemoria.isConstante(direccionExpresion)){
+            valorExpresion = this.directorioProcedimientos.getConstantes().get(direccionExpresion).getValorConstante();
+        } else {
+            valorExpresion =  this.pilaRegistros.peek().getValor(direccionExpresion);
+        }
+        return (Boolean.parseBoolean(valorExpresion));
+    }
+
+    public void read(int direccionRead, String valorLeido){
+        // guardar el valor en la direccion de memoria correspondiente
+        if (ManejadorMemoria.isGlobal(direccionRead)){
+            this.registroGlobal.guardaValor(direccionRead,valorLeido);
+        } else {
+            this.pilaRegistros.peek().guardaValor(direccionRead,valorLeido);
+        }
+    }
+
 }
