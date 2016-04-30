@@ -109,78 +109,93 @@ public class MainActivity extends AppCompatActivity {
                     maquinaVirtual.suma(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
                 case Codigos.RESTA:
                     maquinaVirtual.resta(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
                 case Codigos.MULT:
                     maquinaVirtual.multiplica(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
                 case Codigos.DIV:
                     maquinaVirtual.divide(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
 
                 case Codigos.ASSIGN:
                     maquinaVirtual.asigna(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
 
                 case Codigos.PRINT:
                     String auxImprime = maquinaVirtual.imprime(matrizCuadruplos[instructionPointer][3]);
                     outputTV.setText(outputTV.getText().toString() + '\n' + auxImprime);
+                    instructionPointer++;
                     break;
 
                 case Codigos.VERIFICAR:
                     maquinaVirtual.verifica(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
 
                 case Codigos.SUMAOFFSET:
                     maquinaVirtual.sumaOffset(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][2], matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
 
                 case Codigos.MAYOR:
                     maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
-
+                    instructionPointer++;
+                    break;
                 case Codigos.MENOR:
-                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                    maquinaVirtual.menor(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
-
+                    instructionPointer++;
+                    break;
                 case Codigos.MAYORIG:
-                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                    maquinaVirtual.mayoroigual(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
-
+                    instructionPointer++;
+                    break;
                 case Codigos.MENORIG:
-                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                    maquinaVirtual.menoroigual(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
-
+                    instructionPointer++;
+                    break;
                 case Codigos.IGUAL:
-                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                    maquinaVirtual.igualigual(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
-
+                    instructionPointer++;
+                    break;
                 case Codigos.DIFERENTE:
-                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                    maquinaVirtual.diferente(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
+                    break;
                 case Codigos.GOTO:
                     instructionPointer = matrizCuadruplos[instructionPointer][3];
-                    instructionPointer--; // se decrementa en uno para que la operacion de incremento al final del switch no tenga efecto
                     break;
                 case Codigos.GOTOF:
                     if (!maquinaVirtual.gotoFalso(matrizCuadruplos[instructionPointer][1])) {
                         instructionPointer = matrizCuadruplos[instructionPointer][3];
-                        instructionPointer--; // se decrementa en uno para que la operacion de incremento al final del switch no tenga efecto
+                    } else {
+                        instructionPointer++;
                     }
                     break;
                 case Codigos.READ:
@@ -193,16 +208,19 @@ public class MainActivity extends AppCompatActivity {
                 case Codigos.AND:
                     maquinaVirtual.and(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][2]
                             , matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
                 case Codigos.OR:
                     maquinaVirtual.or(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][2]
                             , matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
                 case Codigos.NOT:
                     maquinaVirtual.not(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
                     break;
             }
-            instructionPointer++;
+
         }
     }
 
