@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private Button bttnCompilar;
     private EditText codigoET;
     private TextView outputTV;
-    private EditText inputBoxET;
     private ACBasic parser;
 
     private int[][] matrizCuadruplos;
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         bttnCompilar = (Button) findViewById(R.id.button);
         codigoET = (EditText) findViewById(R.id.codigoEntrada);
         outputTV = (TextView) findViewById(R.id.output);
-        inputBoxET = (EditText) findViewById(R.id.inputBox);
 
         bttnCompilar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case Codigos.PRINT:
-                    maquinaVirtual.imprime(matrizCuadruplos[instructionPointer][3]);
+                    String auxImprime = maquinaVirtual.imprime(matrizCuadruplos[instructionPointer][3]);
+                    outputTV.setText(outputTV.getText().toString() + '\n' + auxImprime);
                     break;
 
                 case Codigos.VERIFICAR:

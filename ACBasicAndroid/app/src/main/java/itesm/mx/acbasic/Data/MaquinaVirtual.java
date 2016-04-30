@@ -461,13 +461,20 @@ public class MaquinaVirtual {
         }
     }
 
-    public void imprime(int direccionValor){
+    /**
+     * Metodo para regresar al main activity el string a imprimir
+     * @param direccionValor es la direccion donde se encuentra el valor a imprimir
+     * @return el valor a imprimir
+     */
+    public String imprime(int direccionValor){
         //traduce casos de direccionamiento indirecto
         direccionValor = traduceDirIndirecto(direccionValor);
         if (ManejadorMemoria.isGlobal(direccionValor)){
-            System.out.println(this.registroGlobal.getValor(direccionValor));
+            return this.registroGlobal.getValor(direccionValor);
+        } else if (ManejadorMemoria.isConstante(direccionValor)){
+            return this.directorioProcedimientos.getConstantes().get(direccionValor).getValorConstante();
         } else {
-            System.out.println(this.pilaRegistros.peek().getValor(direccionValor));
+            return this.pilaRegistros.peek().getValor(direccionValor);
         }
     }
 
