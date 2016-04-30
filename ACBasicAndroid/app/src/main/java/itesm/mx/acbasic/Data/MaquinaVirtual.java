@@ -63,6 +63,19 @@ public class MaquinaVirtual {
                         return (Integer.parseInt(valor1) * Integer.parseInt(valor2)) + "";
                     case Codigos.DIV:
                         return (Integer.parseInt(valor1) / Integer.parseInt(valor2)) + "";
+                    case Codigos.MAYOR:
+                        System.out.println(valor1 + " " + valor2 + " " + (Integer.parseInt(valor1) > Integer.parseInt(valor2)));
+                        return (Integer.parseInt(valor1) > Integer.parseInt(valor2)) + "";
+                    case Codigos.MENOR:
+                        return (Integer.parseInt(valor1) < Integer.parseInt(valor2)) + "";
+                    case Codigos.MAYORIG:
+                        return (Integer.parseInt(valor1) >= Integer.parseInt(valor2)) + "";
+                    case Codigos.MENORIG:
+                        return (Integer.parseInt(valor1) <= Integer.parseInt(valor2)) + "";
+                    case Codigos.IGUAL:
+                        return (Integer.parseInt(valor1) == Integer.parseInt(valor2)) + "";
+                    case Codigos.DIFERENTE:
+                        return (Integer.parseInt(valor1) != Integer.parseInt(valor2)) + "";
                 }
             } else if (ManejadorMemoria.isFloat(operando2)){
                 switch(op){
@@ -74,6 +87,18 @@ public class MaquinaVirtual {
                         return (Integer.parseInt(valor1) * Double.parseDouble(valor2)) + "";
                     case Codigos.DIV:
                         return (Integer.parseInt(valor1) / Double.parseDouble(valor2)) + "";
+                    case Codigos.MAYOR:
+                        return (Integer.parseInt(valor1) > Double.parseDouble(valor2)) + "";
+                    case Codigos.MENOR:
+                        return (Integer.parseInt(valor1) < Double.parseDouble(valor2)) + "";
+                    case Codigos.MAYORIG:
+                        return (Integer.parseInt(valor1) >= Double.parseDouble(valor2)) + "";
+                    case Codigos.MENORIG:
+                        return (Integer.parseInt(valor1) <= Double.parseDouble(valor2)) + "";
+                    case Codigos.IGUAL:
+                        return (Integer.parseInt(valor1) == Double.parseDouble(valor2)) + "";
+                    case Codigos.DIFERENTE:
+                        return (Integer.parseInt(valor1) != Double.parseDouble(valor2)) + "";
                 }
             }
         } else if (ManejadorMemoria.isFloat(operando1)){
@@ -87,6 +112,18 @@ public class MaquinaVirtual {
                         return (Double.parseDouble(valor1) * Integer.parseInt(valor2)) + "";
                     case Codigos.DIV:
                         return (Double.parseDouble(valor1) / Integer.parseInt(valor2)) + "";
+                    case Codigos.MAYOR:
+                        return (Double.parseDouble(valor1) > Integer.parseInt(valor2)) + "";
+                    case Codigos.MENOR:
+                        return (Double.parseDouble(valor1) < Integer.parseInt(valor2)) + "";
+                    case Codigos.MAYORIG:
+                        return (Double.parseDouble(valor1) >= Integer.parseInt(valor2)) + "";
+                    case Codigos.MENORIG:
+                        return (Double.parseDouble(valor1) <= Integer.parseInt(valor2)) + "";
+                    case Codigos.IGUAL:
+                        return (Double.parseDouble(valor1) == Integer.parseInt(valor2)) + "";
+                    case Codigos.DIFERENTE:
+                        return (Double.parseDouble(valor1) != Integer.parseInt(valor2)) + "";
                 }
             } else if (ManejadorMemoria.isFloat(operando2)) {
                 switch(op){
@@ -98,6 +135,18 @@ public class MaquinaVirtual {
                         return (Double.parseDouble(valor1) * Double.parseDouble(valor2)) + "";
                     case Codigos.DIV:
                         return (Double.parseDouble(valor1) / Double.parseDouble(valor2)) + "";
+                    case Codigos.MAYOR:
+                        return (Double.parseDouble(valor1) > Double.parseDouble(valor2)) + "";
+                    case Codigos.MENOR:
+                        return (Double.parseDouble(valor1) < Double.parseDouble(valor2)) + "";
+                    case Codigos.MAYORIG:
+                        return (Double.parseDouble(valor1) >= Double.parseDouble(valor2)) + "";
+                    case Codigos.MENORIG:
+                        return (Double.parseDouble(valor1) <= Double.parseDouble(valor2)) + "";
+                    case Codigos.IGUAL:
+                        return (Double.parseDouble(valor1) == Double.parseDouble(valor2)) + "";
+                    case Codigos.DIFERENTE:
+                        return (Double.parseDouble(valor1) != Double.parseDouble(valor2)) + "";
                 }
             }
         } else if (ManejadorMemoria.isString(operando1)){
@@ -519,6 +568,516 @@ public class MaquinaVirtual {
         // sumar la expresion de indexamiento con la direccion base y guardarlo en el mapa de memoria local
         String direccionMemoriaCasilla = (direccionBase + Integer.parseInt(valorIndex)) + "";
         this.pilaRegistros.peek().guardaValor(direccionResultadoOffset,direccionMemoriaCasilla);
+    }
+
+    /**
+     * Metodo que revisa la operación Mayor que
+     * @param dirOp1 Direccion del operando 1
+     * @param dirOp2 Direccion del operando 2
+     * @param dirRes Direccion del resultado de la operacion mayor que
+     */
+    public void mayor (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
+        if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
+            String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.MAYOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.MAYOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 =this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                } else { //RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                }
+            }
+        } else if (ManejadorMemoria.isGlobal(dirOp1)){ // OPERANDO 1 GLOBAL
+            String valor1 = this.registroGlobal.getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                }
+            }
+        } else { // OPERANDO 1 LOCAL
+            String valor1 = this.pilaRegistros.peek().getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                } else { // RES 2 LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                }
+            } else { //OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYOR));
+                }
+            }
+        }
+    }
+
+    /**
+     * Metodo que revisa la operación Menor que
+     * @param dirOp1 Direccion del operando 1
+     * @param dirOp2 Direccion del operando 2
+     * @param dirRes Direccion del resultado de la operacion menor que
+     */
+    public void menor (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
+        if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
+            String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.MENOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.MENOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 =this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                } else { //RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                }
+            }
+        } else if (ManejadorMemoria.isGlobal(dirOp1)){ // OPERANDO 1 GLOBAL
+            String valor1 = this.registroGlobal.getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                }
+            }
+        } else { // OPERANDO 1 LOCAL
+            String valor1 = this.pilaRegistros.peek().getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                } else { // RES 2 LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                }
+            } else { //OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENOR));
+                }
+            }
+        }
+    }
+
+    /**
+     * Metodo que revisa la operación Mayor o igual que
+     * @param dirOp1 Direccion del operando 1
+     * @param dirOp2 Direccion del operando 2
+     * @param dirRes Direccion del resultado de la operacion mayor o igual que
+     */
+    public void mayoroigual (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
+        if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
+            String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.MAYORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.MAYORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 =this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                } else { //RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                }
+            }
+        } else if (ManejadorMemoria.isGlobal(dirOp1)){ // OPERANDO 1 GLOBAL
+            String valor1 = this.registroGlobal.getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                }
+            }
+        } else { // OPERANDO 1 LOCAL
+            String valor1 = this.pilaRegistros.peek().getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                } else { // RES 2 LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                }
+            } else { //OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MAYORIG));
+                }
+            }
+        }
+    }
+
+    /**
+     * Metodo que revisa la operación Menor o igual que
+     * @param dirOp1 Direccion del operando 1
+     * @param dirOp2 Direccion del operando 2
+     * @param dirRes Direccion del resultado de la operacion menor o igual que
+     */
+    public void menoroigual (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
+        if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
+            String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.MENORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.MENORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 =this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                } else { //RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                }
+            }
+        } else if (ManejadorMemoria.isGlobal(dirOp1)){ // OPERANDO 1 GLOBAL
+            String valor1 = this.registroGlobal.getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                }
+            }
+        } else { // OPERANDO 1 LOCAL
+            String valor1 = this.pilaRegistros.peek().getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                } else { // RES 2 LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                }
+            } else { //OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.MENORIG));
+                }
+            }
+        }
+    }
+
+    /**
+     * Metodo que revisa la operación Igual igual que
+     * @param dirOp1 Direccion del operando 1
+     * @param dirOp2 Direccion del operando 2
+     * @param dirRes Direccion del resultado de la operacion igual igual que
+     */
+    public void igualigual (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
+        if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
+            String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.IGUAL));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.IGUAL));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 =this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                } else { //RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                }
+            }
+        } else if (ManejadorMemoria.isGlobal(dirOp1)){ // OPERANDO 1 GLOBAL
+            String valor1 = this.registroGlobal.getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                }
+            }
+        } else { // OPERANDO 1 LOCAL
+            String valor1 = this.pilaRegistros.peek().getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                } else { // RES 2 LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                }
+            } else { //OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.IGUAL));
+                }
+            }
+        }
+    }
+
+    /**
+     * Metodo que revisa la operación Diferente que
+     * @param dirOp1 Direccion del operando 1
+     * @param dirOp2 Direccion del operando 2
+     * @param dirRes Direccion del resultado de la operacion diferente que
+     */
+    public void diferente (int dirOp1, int dirOp2, int dirRes) {
+        //traduce casos de direccionamiento indirecto
+        dirOp1 = traduceDirIndirecto(dirOp1);
+        dirOp2 = traduceDirIndirecto(dirOp2);
+        if (ManejadorMemoria.isConstante(dirOp1)){ // OPERANDO 1 CTE
+            String valor1 = this.directorioProcedimientos.getConstantes().get(dirOp1).getValorConstante();
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.DIFERENTE));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes,auxOperacion(dirOp1,dirOp2,valor1,valor2,Codigos.DIFERENTE));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 =this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                } else { //RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                }
+            }
+        } else if (ManejadorMemoria.isGlobal(dirOp1)){ // OPERANDO 1 GLOBAL
+            String valor1 = this.registroGlobal.getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                }
+            } else { // OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                }
+            }
+        } else { // OPERANDO 1 LOCAL
+            String valor1 = this.pilaRegistros.peek().getValor(dirOp1);
+            if (ManejadorMemoria.isGlobal(dirOp2)){ // OPERANDO 2 GLOBAL
+                String valor2 = this.registroGlobal.getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                } else { // RES 2 LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                }
+            } else if (ManejadorMemoria.isConstante(dirOp2)){ // OPERANDO 2 CTE
+                String valor2 = this.directorioProcedimientos.getConstantes().get(dirOp2).getValorConstante();
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                }
+            } else { //OPERANDO 2 LOCAL
+                String valor2 = this.pilaRegistros.peek().getValor(dirOp2);
+                if (ManejadorMemoria.isGlobal(dirRes)){ // RES GLOBAL
+                    this.registroGlobal.guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                } else { // RES LOCAL
+                    this.pilaRegistros.peek().guardaValor(dirRes, auxOperacion(dirOp1, dirOp2, valor1, valor2, Codigos.DIFERENTE));
+                }
+            }
+        }
     }
 
 }

@@ -129,13 +129,42 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case Codigos.VERIFICAR:
-                    maquinaVirtual.verifica(matrizCuadruplos[instructionPointer][1],matrizCuadruplos[instructionPointer][3]);
+                    maquinaVirtual.verifica(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3]);
                     break;
 
                 case Codigos.SUMAOFFSET:
                     maquinaVirtual.sumaOffset(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][2], matrizCuadruplos[instructionPointer][3]);
                     break;
 
+                case Codigos.MAYOR:
+                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
+
+                case Codigos.MENOR:
+                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
+
+                case Codigos.MAYORIG:
+                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
+
+                case Codigos.MENORIG:
+                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
+
+                case Codigos.IGUAL:
+                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
+
+                case Codigos.DIFERENTE:
+                    maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
+                            matrizCuadruplos[instructionPointer][2],
+                            matrizCuadruplos[instructionPointer][3]);
             }
             instructionPointer++;
         }
