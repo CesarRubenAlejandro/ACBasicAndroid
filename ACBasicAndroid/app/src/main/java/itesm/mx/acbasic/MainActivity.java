@@ -142,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
                     maquinaVirtual.sumaOffset(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][2], matrizCuadruplos[instructionPointer][3]);
                     break;
 
-<<<<<<< HEAD
                 case Codigos.MAYOR:
                     maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
@@ -172,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
                     maquinaVirtual.mayor(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
-=======
                 case Codigos.GOTO:
                     instructionPointer = matrizCuadruplos[instructionPointer][3];
                     break;
@@ -188,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, ReadActivity.class);
                     startActivityForResult(intent, REQUEST_CODE);
                     break;
->>>>>>> 21758ce5286bca034d4fda66e04e052e91726ea1
             }
             instructionPointer++;
         }
