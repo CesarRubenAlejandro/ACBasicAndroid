@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     parser = new ACBasic(is);
                 } else {
                     parser.ReInit(is);
+                    parser = new ACBasic(is);
                 }
                 try {
                     parser.init();
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                             matrizCuadruplos[instructionPointer][2],
                             matrizCuadruplos[instructionPointer][3]);
                     break;
+
                 case Codigos.ASSIGN:
                     maquinaVirtual.asigna(matrizCuadruplos[instructionPointer][1],
                             matrizCuadruplos[instructionPointer][3]);
@@ -173,10 +175,12 @@ public class MainActivity extends AppCompatActivity {
                             matrizCuadruplos[instructionPointer][3]);
                 case Codigos.GOTO:
                     instructionPointer = matrizCuadruplos[instructionPointer][3];
+                    instructionPointer--; // se decrementa en uno para que la operacion de incremento al final del switch no tenga efecto
                     break;
                 case Codigos.GOTOF:
                     if (!maquinaVirtual.gotoFalso(matrizCuadruplos[instructionPointer][1])) {
                         instructionPointer = matrizCuadruplos[instructionPointer][3];
+                        instructionPointer--; // se decrementa en uno para que la operacion de incremento al final del switch no tenga efecto
                     }
                     break;
                 case Codigos.READ:
@@ -185,6 +189,17 @@ public class MainActivity extends AppCompatActivity {
                     instructionPointer = contadorCuadruplos;
                     Intent intent = new Intent(MainActivity.this, ReadActivity.class);
                     startActivityForResult(intent, REQUEST_CODE);
+                    break;
+                case Codigos.AND:
+                    maquinaVirtual.and(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][2]
+                            , matrizCuadruplos[instructionPointer][3]);
+                    break;
+                case Codigos.OR:
+                    maquinaVirtual.or(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][2]
+                            , matrizCuadruplos[instructionPointer][3]);
+                    break;
+                case Codigos.NOT:
+                    maquinaVirtual.not(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3]);
                     break;
             }
             instructionPointer++;
@@ -195,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode== REQUEST_CODE) && (resultCode==RESULT_OK)){
-            System.out.println("REGRESEE");
             Bundle datos = data.getExtras();
             maquinaVirtual.read(matrizCuadruplos[auxiliarInstructionPointer][3], datos.getString("valor"));
             instructionPointer = auxiliarInstructionPointer + 1;
