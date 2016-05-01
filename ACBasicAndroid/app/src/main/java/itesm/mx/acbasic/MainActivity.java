@@ -19,6 +19,7 @@ import java.util.Stack;
 import itesm.mx.acbasic.Data.Codigos;
 import itesm.mx.acbasic.Data.DirectorioProcedimientos;
 import itesm.mx.acbasic.Data.MaquinaVirtual;
+import itesm.mx.acbasic.Data.Procedimiento;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -217,6 +218,20 @@ public class MainActivity extends AppCompatActivity {
                 case Codigos.NOT:
                     maquinaVirtual.not(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3]);
                     instructionPointer++;
+                    break;
+                case Codigos.ERA:
+                    maquinaVirtual.era(matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
+                    break;
+                case Codigos.PARAM:
+                    maquinaVirtual.param(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
+                    break;
+                case Codigos.GOSUB:
+                    instructionPointer = maquinaVirtual.gosub(matrizCuadruplos[instructionPointer][3], instructionPointer);
+                    break;
+                case Codigos.ENDPROC:
+                    instructionPointer = maquinaVirtual.endproc();
                     break;
             }
 

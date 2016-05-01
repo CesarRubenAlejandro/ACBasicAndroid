@@ -120,6 +120,7 @@ public class ACBasic implements ACBasicConstants {
         Procedimiento programProc = new Procedimiento();
         programProc.setNombreProcedimiento(idPrograma.toString());
         programProc.setTipoProcedimiento(Codigos.PROGRAM);
+        programProc.setIdentificadorProcedimiento(-1);
         // guardar el procedimiento program en el directorio de procedimientos
         if (!dirProcedimientos.agregarProcedimiento(programProc)) {
             // si ya existe un procedimiento con ese nombre, reportar error
@@ -1578,6 +1579,7 @@ public class ACBasic implements ACBasicConstants {
         Procedimiento mainProc = new Procedimiento();
         mainProc.setNombreProcedimiento("main");
         mainProc.setTipoProcedimiento(Codigos.MAIN);
+        mainProc.setIdentificadorProcedimiento(-2);
 
         // dar de alta el proc main en directorio de procedimientos
         dirProcedimientos.agregarProcedimiento(mainProc);

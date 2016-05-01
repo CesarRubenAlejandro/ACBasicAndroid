@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class DirectorioProcedimientos {
 	// mapa que guarda todos los procedimientos. 
-	// la llave String es el id del procedimiento
+	// la llave String es el nombre del procedimiento
 	private HashMap<String, Procedimiento> procedimientos;
 	// mapa que guarda las constantes, la llave es el valor de la constante en tipo String
 	private HashMap<Integer, Constante> constantes;
@@ -117,6 +117,20 @@ public class DirectorioProcedimientos {
 				return this.procedimientos.get(this.nombrePrograma).getVariables().get(nombreVariable);
 			}
 		} 
+		return null;
+	}
+
+	/**
+	 * Metodo para regresar el objeto procedimiento basado en su identificador
+	 * @param idProcedimiento es el identificador del procedimiento que se desea usar
+	 * @return el objeto procedimiento
+	 */
+	public Procedimiento obtenerProcedimientoPorId(int idProcedimiento){
+		for (String key: this.procedimientos.keySet()){
+			if (this.procedimientos.get(key).getIdentificadorProcedimiento() == idProcedimiento){
+				return this.procedimientos.get(key);
+			}
+		}
 		return null;
 	}
 	

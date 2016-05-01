@@ -12,14 +12,15 @@ public class MaquinaVirtual {
     private Registro registroGlobal;
     private Stack<Registro> pilaRegistros;
     private String valorRetorno;
+    private Stack<Registro> pilaEras;
 
     public MaquinaVirtual(DirectorioProcedimientos directorioProcedimientos) {
         this.directorioProcedimientos = directorioProcedimientos;
         registroGlobal = new Registro();
         pilaRegistros = new Stack<Registro>();
         valorRetorno = "";
+        pilaEras = new Stack<Registro>();
 
-        // SOLO PARA PROBAR
         pilaRegistros.push(new Registro()); // registro main
     }
 
@@ -1307,25 +1308,112 @@ public class MaquinaVirtual {
          * @param direccionExpresion es la direccion donde se encuentra el resultado de la expresion bool
          * @return valor bool de la expresion
          */
-        public boolean gotoFalso ( int direccionExpresion){
-            String valorExpresion;
-            // obtener el valor dentro de la direccion recibida
-            if (ManejadorMemoria.isGlobal(direccionExpresion)) {
-                valorExpresion = this.registroGlobal.getValor(direccionExpresion);
-            } else if (ManejadorMemoria.isConstante(direccionExpresion)) {
-                valorExpresion = this.directorioProcedimientos.getConstantes().get(direccionExpresion).getValorConstante();
-            } else {
-                valorExpresion = this.pilaRegistros.peek().getValor(direccionExpresion);
-            }
-            return (Boolean.parseBoolean(valorExpresion));
+    public boolean gotoFalso ( int direccionExpresion){
+        String valorExpresion;
+        // obtener el valor dentro de la direccion recibida
+        if (ManejadorMemoria.isGlobal(direccionExpresion)) {
+            valorExpresion = this.registroGlobal.getValor(direccionExpresion);
+        } else if (ManejadorMemoria.isConstante(direccionExpresion)) {
+            valorExpresion = this.directorioProcedimientos.getConstantes().get(direccionExpresion).getValorConstante();
+        } else {
+            valorExpresion = this.pilaRegistros.peek().getValor(direccionExpresion);
         }
+        return (Boolean.parseBoolean(valorExpresion));
+    }
 
-        public void read ( int direccionRead, String valorLeido){
-            // guardar el valor en la direccion de memoria correspondiente
-            if (ManejadorMemoria.isGlobal(direccionRead)) {
-                this.registroGlobal.guardaValor(direccionRead, valorLeido);
-            } else {
-                this.pilaRegistros.peek().guardaValor(direccionRead, valorLeido);
+
+    /**
+     * Metodo para guardar el valor leido en la GUI
+     * @param direccionRead es la direccion donde se guarda el valor
+     * @param valorLeido es el valor leido
+     */
+    public void read ( int direccionRead, String valorLeido){
+        //traduce casos de direccionamiento indirecto
+        direccionRead = traduceDirIndirecto(direccionRead);
+        // guardar el valor en la direccion de memoria correspondiente
+        if (ManejadorMemoria.isGlobal(direccionRead)) {
+            this.registroGlobal.guardaValor(direccionRead, valorLeido);
+        } else {
+            this.pilaRegistros.peek().guardaValor(direccionRead, valorLeido);
+        }
+    }
+
+    /**
+     * Metodo para generar un nuevo registro
+     * @param idProcedimiento es el identificador del procedimiento a llamar
+     */
+    public void era (int idProcedimiento){
+        // crear nuevo objeto Registro con el id correspondiente
+        Registro registroNuevo = new Registro();
+        registroNuevo.setIdentificadorProcedimiento(idProcedimiento);
+        this.pilaEras.push(registroNuevo);
+    }
+
+    /**
+     * Metodo para asignar el valor de un parametro a su objeto Registro correspondiente
+     * @param direccionValorParam es la direccion donde esta el valor del parametro
+     * @param numeroParam es la posicion del parametro en la lista de parametros del procedimiento llamado
+     */
+    public void param(int direccionValorParam, int numeroParam){
+        String valorParam = "";
+        //traduce casos de direccionamiento indirecto
+        direccionValorParam = traduceDirIndirecto(direccionValorParam);
+        // obtener la direccion de la variable parametrizada en el procedimiento llamado
+        int dirParamRegistro = this.directorioProcedimientos.
+                obtenerProcedimientoPorId(this.pilaEras.peek().
+                        getIdentificadorProcedimiento()).getDireccionParametros().get(numeroParam);
+
+        if (ManejadorMemoria.isGlobal(direccionValorParam)){
+            // obtener el valor del parametro enviado
+            valorParam = this.registroGlobal.getValor(direccionValorParam);
+
+        } else if (ManejadorMemoria.isConstante(direccionValorParam)){
+            // REVISAR QUE NO SEA UN PARAMETRO POR REFERENCIA
+            if (this.directorioProcedimientos.
+                    obtenerProcedimientoPorId(this.pilaEras.peek().
+                            getIdentificadorProcedimiento()).getIndicadorPorReferencia().get(numeroParam)){
+                // ERROR
+                throw new IllegalArgumentException();
+            }
+            // obtener el valor del parametro enviado
+            valorParam = this.directorioProcedimientos.getConstantes().get(direccionValorParam).getValorConstante();
+
+        } else { // VARIABLE LOCAL
+            // obtener el valor del parametro enviado
+            valorParam = this.pilaRegistros.peek().getValor(direccionValorParam);
+        }
+        // asignar el valor del parametro a su variable correspondiente
+        this.pilaEras.peek().guardaValor(dirParamRegistro, valorParam);
+    }
+
+    /**
+     * Metodo para agregar a la pila de registros de ejecucion el registro en el tope de la pila de eras
+     * @param identificadorProcedimiento es el identificador del metodo llamado
+     * @param instructionPointer es el numero de cuadruplo actual en ejecucion
+     * @return el numero de cuadro donde inicia el metodo llamado
+     */
+    public int gosub(int identificadorProcedimiento, int instructionPointer){
+        this.pilaEras.peek().setDireccionRetorno(instructionPointer+1);
+        this.pilaRegistros.push(this.pilaEras.pop());
+        return this.directorioProcedimientos.obtenerProcedimientoPorId(identificadorProcedimiento).getCuadruploInicial();
+    }
+
+    /**
+     * Metodo para sacar el registro de la pila de registros en ejecucion y asignar los valores por referencia
+     * @return numero de cuadruplo donde debe continuar la ejecucion
+     */
+    public int endproc(){
+        Registro registroAuxiliar = pilaRegistros.pop();
+        Procedimiento procActual = this.directorioProcedimientos.obtenerProcedimientoPorId(registroAuxiliar.getIdentificadorProcedimiento());
+        for (int i=0; i<procActual.getIndicadorPorReferencia().size(); i++){
+            if (procActual.getIndicadorPorReferencia().get(i)){
+                int direccionParametroLocal = procActual.getDireccionParametros().get(i);
+                int direccionArgumento = procActual.getFilaDireccionesLlamada().peek().get(i);
+                String valorParametroLocal = registroAuxiliar.getValor(direccionParametroLocal);
+                this.pilaRegistros.peek().guardaValor(direccionArgumento,valorParametroLocal);
             }
         }
+        procActual.getFilaDireccionesLlamada().remove();
+        return registroAuxiliar.getDireccionRetorno();
+    }
 }

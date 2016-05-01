@@ -7,9 +7,27 @@ import java.util.HashMap;
  */
 public class Registro {
     private HashMap<Integer,String> valores;
+    private int identificadorProcedimiento;
+    private int direccionRetorno;
 
     public Registro() {
         valores = new HashMap<Integer,String>();
+    }
+
+    public int getIdentificadorProcedimiento() {
+        return identificadorProcedimiento;
+    }
+
+    public void setIdentificadorProcedimiento(int identificadorProcedimiento) {
+        this.identificadorProcedimiento = identificadorProcedimiento;
+    }
+
+    public int getDireccionRetorno() {
+        return direccionRetorno;
+    }
+
+    public void setDireccionRetorno(int direccionRetorno) {
+        this.direccionRetorno = direccionRetorno;
     }
 
     public HashMap<Integer, String> getValores() {
