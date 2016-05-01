@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
     private int auxiliarInstructionPointer;
 
-    private Button bttnCompilar;
+    private ImageButton bttnCompilar;
+    private Button bttnClean;
     private EditText codigoET;
     private TextView outputTV;
     private ACBasic parser;
@@ -43,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bttnCompilar = (Button) findViewById(R.id.button);
+        bttnCompilar = (ImageButton) findViewById(R.id.ejecBtn);
+        bttnClean = (Button)  findViewById(R.id.cleanBtn);
         codigoET = (EditText) findViewById(R.id.codigoEntrada);
         outputTV = (TextView) findViewById(R.id.output);
 
@@ -72,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+            }
+        });
+
+        bttnClean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                outputTV.setText("");
             }
         });
     }
