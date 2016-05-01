@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,9 +68,11 @@ public class MainActivity extends AppCompatActivity {
                     instructionPointer = 0;
                     pilaInstrucciones = new Stack<Integer>();
                     maquinaVirtual = new MaquinaVirtual(dirProcedimientos);
+                    outputTV.setText("");
                     ejecutar();
                 } catch (ParseException e) {
                     e.printStackTrace();
+                    outputTV.setText(Html.fromHtml("<font color=#cc0029>" + e.getMessage() + "</font>"));
                 }
 
             }
@@ -138,13 +141,17 @@ public class MainActivity extends AppCompatActivity {
 
                 case Codigos.PRINT:
                     String auxImprime = maquinaVirtual.imprime(matrizCuadruplos[instructionPointer][3]);
-                    outputTV.setText(outputTV.getText().toString() + '\n' + auxImprime);
+                    outputTV.append(Html.fromHtml( "<br/>" +  "<font color=#000000>"  + auxImprime +  "</font>"));
                     instructionPointer++;
                     break;
 
                 case Codigos.VERIFICAR:
-                    maquinaVirtual.verifica(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3]);
-                    instructionPointer++;
+                    if (!maquinaVirtual.verifica(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3])){
+                        outputTV.append( Html.fromHtml("<font color=#cc0029> Array out of index </font>"));
+                        instructionPointer = contadorCuadruplos;
+                    } else {
+                        instructionPointer++;
+                    }
                     break;
 
                 case Codigos.SUMAOFFSET:
@@ -251,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode== REQUEST_CODE) && (resultCode==RESULT_OK)){
             Bundle datos = data.getExtras();
+            outputTV.append( Html.fromHtml("<br/> <font color=#008080>" + datos.getString("valor") + "</font>"));
             maquinaVirtual.read(matrizCuadruplos[auxiliarInstructionPointer][3], datos.getString("valor"));
             instructionPointer = auxiliarInstructionPointer + 1;
             ejecutar();

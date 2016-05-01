@@ -749,7 +749,7 @@ public class MaquinaVirtual {
      * @param direccionValor es la direccion de memoria donde se encuentra el valor del indexamiento
      * @param limite         es la cantidad de casillas del arreglo
      */
-    public void verifica(int direccionValor, int limite) {
+    public boolean verifica(int direccionValor, int limite) {
         String valorIndex;
         // obtener el valor dentro de la direccion recibida
         if (ManejadorMemoria.isGlobal(direccionValor)) {
@@ -760,9 +760,7 @@ public class MaquinaVirtual {
             valorIndex = this.pilaRegistros.peek().getValor(direccionValor);
         }
         // revisar que el valor no sobrepase el limite del arreglo
-        if (Integer.parseInt(valorIndex) >= limite) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
+        return Integer.parseInt(valorIndex) < limite;
     }
 
     /**
