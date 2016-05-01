@@ -46,64 +46,65 @@ public class ACBasic implements ACBasicConstants {
         return dirProcedimientos;
     }
 
-    static void errorHandler(int type, String detail) {
+    static void errorHandler(int type, String detail) throws ParseException {
+        ParseException e;
         switch (type){
             case 1:
                 System.out.println("Error: Procedimiento repetido:" + detail);
-                System.exit(0);
-                break;
+                 e = new ParseException("Error: Procedimiento repetido:" + detail);
+                throw e;
             case 2:
                 System.out.println("Error: Variable repetida:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Variable repetida:" + detail);
+                throw e;
             case 3:
                 System.out.println("Error: Parametro repetido:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Parametro repetido:" + detail);
+                throw e;
             case 4:
                 System.out.println("Error: ID no definido:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: ID no definido:" + detail);
+                throw e;
             case 5:
                 System.out.println("Error: Tipos no coinciden:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Tipos no coinciden:" + detail);
+                throw e;
             case 6:
                 System.out.println("Error: Expresion no es booleana:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Expresion no es booleana:" + detail);
+                throw e;
             case 7:
                 System.out.println("Error: Argumentos no coinciden en:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Argumentos no coinciden en:" + detail);
+                throw e;
             case 8:
                 System.out.println("Error: Procedimiento void con valor de retorno tipo:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Procedimiento void con valor de retorno tipo:" + detail);
+                throw e;
             case 9:
                 System.out.println("Error: Procedimiento no void sin valor de retorno en:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Procedimiento no void sin valor de retorno en:" + detail);
+                throw e;
             case 10:
                 System.out.println("Error: Procedimiento con incorrecto tipo de retorno en:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Procedimiento con incorrecto tipo de retorno en:" + detail);
+                throw e;
             case 11:
-                System.out.println("Error: Tama\u00f1o del procedimiento imposible:" + detail);
-                System.exit(0);
-                break;
+                System.out.println("Error: Tamano del procedimiento imposible:" + detail);
+                e = new ParseException("Error: Tamano del procedimiento imposible:" + detail);
+                throw e;
             case 12:
                 System.out.println("Error: Index del arreglo no es entero:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Index del arreglo no es entero:" + detail);
+                throw e;
             case 13:
                 System.out.println("Error: Constante de tipo diferente al arreglo:" + detail);
-                System.exit(0);
-                break;
+                e = new ParseException("Error: Constante de tipo diferente al arreglo:" + detail);
+                throw e;
             case 14:
-                System.out.println("Error: Tama\u00f1o incorrecto en la declaracion del arreglo:" + detail);
-                System.exit(0);
-                break;
+                System.out.println("Error: Tamano incorrecto en la declaracion del arreglo:" + detail);
+                e = new ParseException("Error: Tamano incorrecto en la declaracion del arreglo:" + detail);
+                throw e;
         }
     }
 
@@ -304,7 +305,6 @@ public class ACBasic implements ACBasicConstants {
             vars1();
             jj_consume_token(PYC);
         }
-        dirProcedimientos.getProcedimientos().get(procedimientoActual).llenaTamanoVar();
     }
 
     static final public void vars1() throws ParseException {
@@ -449,7 +449,7 @@ public class ACBasic implements ACBasicConstants {
         }
     }
 
-    static final public void func() throws ParseException {
+    static final public void func() throws ParseException{
         int tipoFuncion; Token nombreProc;
         jj_consume_token(FUNC);
         // crear un objeto procedimiento
@@ -554,7 +554,7 @@ public class ACBasic implements ACBasicConstants {
                 jj_consume_token(AMP);
                 // si lee un &, definir el parametro actual como POR REFERENCIA
                 int size = dirProcedimientos.getProcedimientos().get(procedimientoActual).getIndicadorPorReferencia().size();
-                dirProcedimientos.getProcedimientos().get(procedimientoActual).getIndicadorPorReferencia().set(size - 1, true);
+                dirProcedimientos.getProcedimientos().get(procedimientoActual).getIndicadorPorReferencia().set(size-1, true);
                 break;
             default:
                 jj_la1[14] = jj_gen;
@@ -811,8 +811,7 @@ public class ACBasic implements ACBasicConstants {
                     //guardar resultado en pila operandos
                     pilaOperandos.push(direccionRes);
                     pilaTipos.push(tipoRes);
-                    // agregar al tamaño de procedimiento un temporal
-                    dirProcedimientos.getProcedimientos().get(procedimientoActual).getTamano().setTamanoTemp(tipoRes);
+
                 } else {
                     // ERROR
                     errorHandler(5, tipo1 + " y " +tipo2);
@@ -913,8 +912,7 @@ public class ACBasic implements ACBasicConstants {
                             //guardar resultado en pila operandos
                             pilaOperandos.push(direccionRes);
                             pilaTipos.push(tipoRes);
-                            // agregar al tamaño de procedimiento un temporal
-                            dirProcedimientos.getProcedimientos().get(procedimientoActual).getTamano().setTamanoTemp(tipoRes);
+
                         } else {
                             // ERROR
                             errorHandler(5, tipo1 + " y " +tipo2);
@@ -951,8 +949,7 @@ public class ACBasic implements ACBasicConstants {
                     //guardar resultado en pila operandos
                     pilaOperandos.push(direccionRes);
                     pilaTipos.push(tipoRes);
-                    // agregar al tamaño de procedimiento un temporal
-                    dirProcedimientos.getProcedimientos().get(procedimientoActual).getTamano().setTamanoTemp(tipoRes);
+
                 } else {
                     // ERROR
                     errorHandler(5, tipo1 + " y " +tipo2);
@@ -1013,11 +1010,10 @@ public class ACBasic implements ACBasicConstants {
                     //guardar resultado en pila operandos
                     pilaOperandos.push(direccionRes);
                     pilaTipos.push(tipoRes);
-                    // agregar al tamaño de procedimiento un temporal
-                    dirProcedimientos.getProcedimientos().get(procedimientoActual).getTamano().setTamanoTemp(tipoRes);
+
                 } else {
                     // ERROR
-                    errorHandler(5, tipo1 + " y " + tipo2);
+                    errorHandler(5, tipo1 + " y " +tipo2);
                 }
             }
         }
@@ -1099,8 +1095,7 @@ public class ACBasic implements ACBasicConstants {
                     //guardar resultado en pila operandos
                     pilaOperandos.push(direccionRes);
                     pilaTipos.push(tipo);
-                    // agregar al tamaño de procedimiento un temporal
-                    dirProcedimientos.getProcedimientos().get(procedimientoActual).getTamano().setTamanoTemp(tipo);
+
                 }
             }
         }
@@ -1262,6 +1257,7 @@ public class ACBasic implements ACBasicConstants {
             }
             // agregar al procedimiento llamado las direcciones de los argumentos para usarlos si alguno es por referencia
             dirProcedimientos.getProcedimientos().get(nombreProc).getFilaDireccionesLlamada().add(argumentosParam);
+
             // generar cuadruplo de GOSUB
             matrizCuadruplos[contadorCuadruplo][0] = Codigos.GOSUB;
             matrizCuadruplos[contadorCuadruplo][1] = Codigos.NULO;
@@ -1280,8 +1276,6 @@ public class ACBasic implements ACBasicConstants {
                 matrizCuadruplos[contadorCuadruplo][3] = ManejadorMemoria.getMemoriaTemporal(tipoFuncLlamada);
                 contadorCuadruplo++;
 
-                // agregar al tamaño de procedimiento un temporal
-                dirProcedimientos.getProcedimientos().get(procedimientoActual).getTamano().setTamanoTemp(tipoFuncLlamada);
 
                 // meter a pila de operadores y operandos los valores recien calculados
                 pilaOperandos.push(matrizCuadruplos[contadorCuadruplo-1][3]);

@@ -29,8 +29,6 @@ public class Procedimiento {
 	private ArrayList<Boolean> indicadorPorReferencia;
 	// fila de listas de direcciones de todas las llamadas hechas a la funcion
 	private Queue<ArrayList<Integer>> filaDireccionesLlamada;
-	// tamaño
-	private TamanoProcedimiento tamano;
 	// identificador del procedimiento
 	private int identificadorProcedimiento;
 
@@ -38,7 +36,6 @@ public class Procedimiento {
 	public Procedimiento() {
 		super();
 		tipoParams = new ArrayList<Integer>();
-		tamano = new TamanoProcedimiento();
 		direccionParametros = new ArrayList<Integer>();
 		indicadorPorReferencia = new ArrayList<Boolean>();
 		filaDireccionesLlamada = new LinkedList<ArrayList<Integer>>();
@@ -130,13 +127,6 @@ public class Procedimiento {
 		this.tipoParams = tipoParams;
 	}
 
-	public TamanoProcedimiento getTamano() {
-		return tamano;
-	}
-
-	public void setTamano(TamanoProcedimiento tamano) {
-		this.tamano = tamano;
-	}
 
 	/**
 	 * Metodo para crear la tabla de variables del procedimiento actual
@@ -166,15 +156,6 @@ public class Procedimiento {
 		return this.tipoParams.size();
 	}
 
-	/**
-	 * Metodo para guardar la informacion referente al tamano del procedimiento
-	 */
-	public void llenaTamanoVar(){
-		// guardar el tamano de las variables en el mapa
-		for (Variable actual: this.variables.values()){
-			this.tamano.setTamanoVar(actual.getTipoVariable());
-		}
-	}
 
 	/**
 	 * Metodo para comparar los parametros de una llamada con los parametros
