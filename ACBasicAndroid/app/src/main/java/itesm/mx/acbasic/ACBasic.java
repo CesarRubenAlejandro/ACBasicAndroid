@@ -436,7 +436,6 @@ public class ACBasic implements ACBasicConstants {
             // si ya existe una variable con ese nombre, reportar error
             errorHandler(2,nombreArreglo.toString());
         }
-        System.out.println(auxArreglo.getNombreVariable() + " " + auxArreglo.getSizeVariable());
         jj_consume_token(CORDER);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
             case IGUAL:
@@ -547,9 +546,14 @@ public class ACBasic implements ACBasicConstants {
         if(dirProcedimientos.getProcedimientos().get(procedimientoActual).getVariables()==null){
             dirProcedimientos.getProcedimientos().get(procedimientoActual).crearTablaDeVariables();
         }
+        // definir el primer parametro como NO por referencia (POR VALOR)
+        dirProcedimientos.getProcedimientos().get(procedimientoActual).getIndicadorPorReferencia().add(false);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
             case AMP:
                 jj_consume_token(AMP);
+                // si lee un &, definir el parametro actual como POR REFERENCIA
+                int size = dirProcedimientos.getProcedimientos().get(procedimientoActual).getIndicadorPorReferencia().size();
+                dirProcedimientos.getProcedimientos().get(procedimientoActual).getIndicadorPorReferencia().set(size-1, true);
                 break;
             default:
                 jj_la1[14] = jj_gen;
@@ -1373,6 +1377,7 @@ public class ACBasic implements ACBasicConstants {
         jj_consume_token(PARIZQ);
         exp();
         int resultado = pilaOperandos.pop();
+        // POP PILA TIPOS
         // generar cuadruplo de print
         matrizCuadruplos[contadorCuadruplo][0] = Codigos.PRINT;
         matrizCuadruplos[contadorCuadruplo][1] = Codigos.NULO;
@@ -1384,33 +1389,65 @@ public class ACBasic implements ACBasicConstants {
     }
 
     static final public void read() throws ParseException {
-        Token id;
+        Token id; Boolean arregloLeido = false;
         jj_consume_token(READ);
         jj_consume_token(PARIZQ);
         id = jj_consume_token(ID);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
             case CORIZQ:
                 jj_consume_token(CORIZQ);
+                arregloLeido = true;
                 exp();
                 jj_consume_token(CORDER);
+                int tipoIndex = pilaTipos.pop();
+                int valorIndex = pilaOperandos.pop();
+                if(tipoIndex != Codigos.INT){
+                    //Error
+                    errorHandler(12,id.toString());
+                } else {
+                    Variable varArreglo = dirProcedimientos.obtenerVariable(procedimientoActual, id.toString());
+                    // generar cuadruplo VERIFICA
+                    matrizCuadruplos[contadorCuadruplo][0] = Codigos.VERIFICAR;
+                    matrizCuadruplos[contadorCuadruplo][1] = valorIndex;
+                    matrizCuadruplos[contadorCuadruplo][2] = Codigos.NULO;
+                    matrizCuadruplos[contadorCuadruplo][3] = varArreglo.getSizeVariable();
+                    contadorCuadruplo++;
+                    // GENERAR CUADRUPLO DE SUMA OFFSET + DIRBASE
+                    int direccionResArr = ManejadorMemoria.getMemoriaTemporal(varArreglo.getTipoVariable());
+                    matrizCuadruplos[contadorCuadruplo][0] = Codigos.SUMAOFFSET;
+                    matrizCuadruplos[contadorCuadruplo][1] = valorIndex;
+                    matrizCuadruplos[contadorCuadruplo][2] = varArreglo.getDireccionVariable();
+                    matrizCuadruplos[contadorCuadruplo][3] = direccionResArr;
+                    contadorCuadruplo++;
+
+                    // generar cuadruplo de read
+
+                    matrizCuadruplos[contadorCuadruplo][0] = Codigos.READ;
+                    matrizCuadruplos[contadorCuadruplo][1] = Codigos.NULO;
+                    matrizCuadruplos[contadorCuadruplo][2] = Codigos.NULO;
+                    matrizCuadruplos[contadorCuadruplo][3] = direccionResArr *  -1;
+                    contadorCuadruplo++;
+                }
                 break;
             default:
                 jj_la1[39] = jj_gen;
                 ;
         }
         jj_consume_token(PARDER);
-        // buscar que exista el id
-        Variable varActual = dirProcedimientos.obtenerVariable(procedimientoActual, id.toString());
-        if ( varActual == null) {
-            // ERROR
-            errorHandler(4, id.toString());
-        } else {
-            // generar cuadruplo de print
-            matrizCuadruplos[contadorCuadruplo][0] = Codigos.READ;
-            matrizCuadruplos[contadorCuadruplo][1] = Codigos.NULO;
-            matrizCuadruplos[contadorCuadruplo][2] = Codigos.NULO;
-            matrizCuadruplos[contadorCuadruplo][3] = varActual.getDireccionVariable();
-            contadorCuadruplo++;
+        if (!arregloLeido)  {
+            // buscar que exista el id
+            Variable varActual = dirProcedimientos.obtenerVariable(procedimientoActual, id.toString());
+            if ( varActual == null) {
+                // ERROR
+                errorHandler(4, id.toString());
+            } else {
+                // generar cuadruplo de read
+                matrizCuadruplos[contadorCuadruplo][0] = Codigos.READ;
+                matrizCuadruplos[contadorCuadruplo][1] = Codigos.NULO;
+                matrizCuadruplos[contadorCuadruplo][2] = Codigos.NULO;
+                matrizCuadruplos[contadorCuadruplo][3] = varActual.getDireccionVariable();
+                contadorCuadruplo++;
+            }
         }
         jj_consume_token(PYC);
     }
@@ -1506,6 +1543,9 @@ public class ACBasic implements ACBasicConstants {
                 matrizCuadruplos[contadorCuadruplo][3] = i;
                 contadorCuadruplo++;
             }
+            // agregar al procedimiento llamado las direcciones de los argumentos para usarlos si alguno es por referencia
+            dirProcedimientos.getProcedimientos().get(nombreProc).getFilaDireccionesLlamada().add(argumentosParam);
+
             // generar cuadruplo de GOSUB
             matrizCuadruplos[contadorCuadruplo][0] = Codigos.GOSUB;
             matrizCuadruplos[contadorCuadruplo][1] = Codigos.NULO;

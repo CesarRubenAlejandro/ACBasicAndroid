@@ -2,6 +2,8 @@ package itesm.mx.acbasic.Data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Clase que representa un procedimiento (func) del lenguaje ACBasic
@@ -20,23 +22,54 @@ public class Procedimiento {
 	private int cuadruploInicial;
 	// tipos de los parametros
 	private ArrayList <Integer> tipoParams;
-	
+
 	// DIRECCION(es) VIRTUAL(es) de los PARAMETROS
 	private ArrayList<Integer> direccionParametros;
-	
-	// tama�o
+	// indicadores para saber si algun parametro es por referencia
+	private ArrayList<Boolean> indicadorPorReferencia;
+	// fila de listas de direcciones de todas las llamadas hechas a la funcion
+	private Queue<ArrayList<Integer>> filaDireccionesLlamada;
+	// tamaño
 	private TamanoProcedimiento tamano;
 	// identificador del procedimiento
 	private int identificadorProcedimiento;
-	
-	
+
+
 	public Procedimiento() {
 		super();
 		tipoParams = new ArrayList<Integer>();
 		tamano = new TamanoProcedimiento();
 		direccionParametros = new ArrayList<Integer>();
+		indicadorPorReferencia = new ArrayList<Boolean>();
+		filaDireccionesLlamada = new LinkedList<ArrayList<Integer>>();
 	}
-	
+
+
+
+	public Queue<ArrayList<Integer>> getFilaDireccionesLlamada() {
+		return filaDireccionesLlamada;
+	}
+
+
+
+	public void setFilaDireccionesLlamada(Queue<ArrayList<Integer>> filaDireccionesLlamada) {
+		this.filaDireccionesLlamada = filaDireccionesLlamada;
+	}
+
+
+
+	public ArrayList<Boolean> getIndicadorPorReferencia() {
+		return indicadorPorReferencia;
+	}
+
+
+
+	public void setIndicadorPorReferencia(ArrayList<Boolean> indicadorPorReferencia) {
+		this.indicadorPorReferencia = indicadorPorReferencia;
+	}
+
+
+
 	public ArrayList<Integer> getDireccionParametros() {
 		return direccionParametros;
 	}
@@ -80,7 +113,7 @@ public class Procedimiento {
 	public void setVariables(HashMap<String, Variable> variables) {
 		this.variables = variables;
 	}
-	
+
 	public int getCuadruploInicial() {
 		return cuadruploInicial;
 	}
@@ -111,8 +144,8 @@ public class Procedimiento {
 	public void crearTablaDeVariables(){
 		this.variables = new HashMap<String, Variable>();
 	}
-	
-	
+
+
 	/**
 	 * Metodo para dar de alta una variable en el directorio de variables del procedimiento actual
 	 * @param variableActual
@@ -125,14 +158,14 @@ public class Procedimiento {
 			return true;
 		}
 	}
-	
+
 	/**
-	 * M�todo para obtener la cantidad de parametros
+	 * Método para obtener la cantidad de parametros
 	 */
 	public int getCantidadParametros() {
 		return this.tipoParams.size();
 	}
-	
+
 	/**
 	 * Metodo para guardar la informacion referente al tamano del procedimiento
 	 */
@@ -142,9 +175,9 @@ public class Procedimiento {
 			this.tamano.setTamanoVar(actual.getTipoVariable());
 		}
 	}
-	
+
 	/**
-	 * Metodo para comparar los parametros de una llamada con los parametros 
+	 * Metodo para comparar los parametros de una llamada con los parametros
 	 * esperados en la funcion
 	 */
 	public boolean comparaParams(ArrayList <Integer> paramLlamada) {
