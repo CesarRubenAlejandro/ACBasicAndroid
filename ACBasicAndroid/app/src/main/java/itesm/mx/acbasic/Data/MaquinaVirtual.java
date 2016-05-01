@@ -1393,7 +1393,7 @@ public class MaquinaVirtual {
      * @return el numero de cuadro donde inicia el metodo llamado
      */
     public int gosub(int identificadorProcedimiento, int instructionPointer){
-        this.pilaEras.peek().setDireccionRetorno(instructionPointer+1);
+        this.pilaEras.peek().setDireccionRetorno(instructionPointer + 1);
         this.pilaRegistros.push(this.pilaEras.pop());
         return this.directorioProcedimientos.obtenerProcedimientoPorId(identificadorProcedimiento).getCuadruploInicial();
     }
@@ -1413,7 +1413,43 @@ public class MaquinaVirtual {
                 this.pilaRegistros.peek().guardaValor(direccionArgumento,valorParametroLocal);
             }
         }
-        procActual.getFilaDireccionesLlamada().remove();
+        System.out.println(procActual.getFilaDireccionesLlamada().peek());
+        try {
+            procActual.getFilaDireccionesLlamada().remove();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         return registroAuxiliar.getDireccionRetorno();
+    }
+
+    /**
+     * Metodo para guardar el valor de retorno del metodo en una variable temporal global de la maquina virtual
+     * @param dirValor es la direccion donde esta guardado el valor de retorno del metodo actual
+     */
+    public void retorno(int dirValor){
+        String valorRet = "";
+        if(ManejadorMemoria.isGlobal(dirValor)){
+            valorRet = this.registroGlobal.getValor(dirValor);
+        } else if (ManejadorMemoria.isConstante(dirValor)){
+            valorRet = this.directorioProcedimientos.getConstantes().get(dirValor).getValorConstante();
+        } else {
+            valorRet = this.pilaRegistros.peek().getValor(dirValor);
+        }
+        this.valorRetorno = valorRet;
+    }
+
+    /**
+     * Metodo para asignar el resultado de una funcion a la variable temporal de la funcion que la llamo
+     * @param idFuncionLlamada es el identificador de la funcion que genera el retorno
+     * @param dirAGuardar es la direccion local o global donde se guardara el valor de retorno
+     */
+    public void assignret(int idFuncionLlamada, int dirAGuardar){
+        if(ManejadorMemoria.isGlobal(dirAGuardar)){
+            this.registroGlobal.guardaValor(dirAGuardar,this.valorRetorno);
+        } else {
+            this.pilaRegistros.peek().guardaValor(dirAGuardar,this.valorRetorno);
+        }
+        this.valorRetorno = "";
     }
 }

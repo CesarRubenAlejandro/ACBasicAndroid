@@ -233,6 +233,14 @@ public class MainActivity extends AppCompatActivity {
                 case Codigos.ENDPROC:
                     instructionPointer = maquinaVirtual.endproc();
                     break;
+                case Codigos.RETURN:
+                    maquinaVirtual.retorno(matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
+                    break;
+                case Codigos.ASSIGNRET:
+                    maquinaVirtual.assignret(matrizCuadruplos[instructionPointer][1],matrizCuadruplos[instructionPointer][3]);
+                    instructionPointer++;
+                    break;
             }
 
         }

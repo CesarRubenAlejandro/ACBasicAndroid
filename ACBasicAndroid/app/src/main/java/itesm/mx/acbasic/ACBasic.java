@@ -1260,6 +1260,8 @@ public class ACBasic implements ACBasicConstants {
                 matrizCuadruplos[contadorCuadruplo][3] = i;
                 contadorCuadruplo++;
             }
+            // agregar al procedimiento llamado las direcciones de los argumentos para usarlos si alguno es por referencia
+            dirProcedimientos.getProcedimientos().get(nombreProc).getFilaDireccionesLlamada().add(argumentosParam);
             // generar cuadruplo de GOSUB
             matrizCuadruplos[contadorCuadruplo][0] = Codigos.GOSUB;
             matrizCuadruplos[contadorCuadruplo][1] = Codigos.NULO;
