@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
                     parser = new ACBasic(is);
                 } else {
                     parser.ReInit(is);
-                    parser = new ACBasic(is);
                 }
                 try {
                     parser.init();

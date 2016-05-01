@@ -788,7 +788,6 @@ public class MaquinaVirtual {
     }
 
     /**
-     * <<<<<<< HEAD
      * Metodo que revisa la operación Mayor que
      *
      * @param dirOp1 Direccion del operando 1

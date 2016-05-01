@@ -553,7 +553,7 @@ public class ACBasic implements ACBasicConstants {
                 jj_consume_token(AMP);
                 // si lee un &, definir el parametro actual como POR REFERENCIA
                 int size = dirProcedimientos.getProcedimientos().get(procedimientoActual).getIndicadorPorReferencia().size();
-                dirProcedimientos.getProcedimientos().get(procedimientoActual).getIndicadorPorReferencia().set(size-1, true);
+                dirProcedimientos.getProcedimientos().get(procedimientoActual).getIndicadorPorReferencia().set(size - 1, true);
                 break;
             default:
                 jj_la1[14] = jj_gen;
@@ -1016,7 +1016,7 @@ public class ACBasic implements ACBasicConstants {
                     dirProcedimientos.getProcedimientos().get(procedimientoActual).getTamano().setTamanoTemp(tipoRes);
                 } else {
                     // ERROR
-                    errorHandler(5, tipo1 + " y " +tipo2);
+                    errorHandler(5, tipo1 + " y " + tipo2);
                 }
             }
         }
@@ -1297,6 +1297,9 @@ public class ACBasic implements ACBasicConstants {
         jj_consume_token(PARIZQ);
         exp();
         jj_consume_token(PARDER);
+        // agregar a pila de saltos fondo falso para delimitar esta condicion
+        pilaSaltos.push(Codigos.FONDOFALSOIF);
+
         int auxTipo = pilaTipos.pop();
         if (auxTipo != Codigos.BOOL){
             // ERROR
@@ -1365,11 +1368,12 @@ public class ACBasic implements ACBasicConstants {
                 jj_la1[38] = jj_gen;
                 ;
         }
-        while (!pilaSaltos.isEmpty())
+        while (pilaSaltos.peek() != Codigos.FONDOFALSOIF)
         {
             int fin = pilaSaltos.pop();
             matrizCuadruplos[fin][3] = contadorCuadruplo;
         }
+        pilaSaltos.pop();
     }
 
     static final public void write() throws ParseException {
