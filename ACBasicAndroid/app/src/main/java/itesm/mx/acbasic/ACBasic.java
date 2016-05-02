@@ -1196,6 +1196,11 @@ public class ACBasic implements ACBasicConstants {
 
     static final public void fact5(String nombreProc) throws ParseException {
         ArrayList<Integer > argumentosParam; ArrayList<Integer > tiposParam;
+        // revisar si el id es un metodo
+        if (!dirProcedimientos.getProcedimientos().containsKey(nombreProc.toString())) {
+            // ERROR
+            errorHandler(4,nombreProc.toString());
+        }
         jj_consume_token(PARIZQ);
         // agregar fondo falso
         pilaOperadores.push(Codigos.FONDOFALSO);
@@ -1491,6 +1496,11 @@ public class ACBasic implements ACBasicConstants {
 
     static final public void llam(String nombreProc) throws ParseException {
         ArrayList<Integer > argumentosParam; ArrayList<Integer > tiposParam;
+        // revisar si el id es un metodo
+        if (!dirProcedimientos.getProcedimientos().containsKey(nombreProc.toString())) {
+            // ERROR
+            errorHandler(4,nombreProc.toString());
+        }
         jj_consume_token(PARIZQ);
         // generar cuadruplo ERA
         matrizCuadruplos[contadorCuadruplo][0] = Codigos.ERA;
