@@ -751,6 +751,7 @@ public class MaquinaVirtual {
      */
     public boolean verifica(int direccionValor, int limite) {
         String valorIndex;
+        direccionValor = traduceDirIndirecto(direccionValor);
         // obtener el valor dentro de la direccion recibida
         if (ManejadorMemoria.isGlobal(direccionValor)) {
             valorIndex = this.registroGlobal.getValor(direccionValor);
@@ -773,6 +774,7 @@ public class MaquinaVirtual {
      */
     public void sumaOffset(int direccionValorIndex, int direccionBase, int direccionResultadoOffset) {
         String valorIndex;
+        direccionValorIndex = traduceDirIndirecto(direccionValorIndex);
         // obtener el valor dentro de la direccion recibida
         if (ManejadorMemoria.isGlobal(direccionValorIndex)) {
             valorIndex = this.registroGlobal.getValor(direccionValorIndex);

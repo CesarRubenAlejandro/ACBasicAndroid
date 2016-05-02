@@ -1162,6 +1162,8 @@ public class ACBasic implements ACBasicConstants {
 
     static final public void fact4(String id) throws ParseException {
         jj_consume_token(CORIZQ);
+        // agregar fondo falso
+        pilaOperadores.push(Codigos.FONDOFALSO);
         exp();
         int tipoIndex = pilaTipos.pop();
         int valorIndex = pilaOperandos.pop();
@@ -1188,6 +1190,8 @@ public class ACBasic implements ACBasicConstants {
             pilaTipos.push(varArreglo.getTipoVariable());
         }
         jj_consume_token(CORDER);
+        // quitar fondo falso
+        pilaOperadores.pop();
     }
 
     static final public void fact5(String nombreProc) throws ParseException {
