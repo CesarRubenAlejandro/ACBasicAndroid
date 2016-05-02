@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
     private int auxiliarInstructionPointer;
 
     private ImageButton bttnCompilar;
-    private Button bttnClean;
+    private ImageButton bttnClean;
+    private ImageButton bttnTrash;
+    private ImageButton bttnHelp;
     private EditText codigoET;
     private TextView outputTV;
     private ACBasic parser;
@@ -47,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bttnCompilar = (ImageButton) findViewById(R.id.ejecBtn);
-        bttnClean = (Button)  findViewById(R.id.cleanBtn);
+        bttnClean = (ImageButton)  findViewById(R.id.cleanBtn);
+        bttnTrash = (ImageButton) findViewById(R.id.trashBtn);
+        bttnHelp = (ImageButton) findViewById(R.id.helpBtn);
         codigoET = (EditText) findViewById(R.id.codigoEntrada);
         outputTV = (TextView) findViewById(R.id.output);
 
@@ -87,6 +91,23 @@ public class MainActivity extends AppCompatActivity {
                 outputTV.setText("");
             }
         });
+
+        bttnTrash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                codigoET.setText("");
+                outputTV.setText("");
+            }
+        });
+
+        bttnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHelp = new Intent (MainActivity.this, HelpActivity.class);
+                startActivity(intentHelp);
+            }
+        });
+
     }
 
     @Override

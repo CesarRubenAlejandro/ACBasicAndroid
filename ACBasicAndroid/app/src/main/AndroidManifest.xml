@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="itesm.mx.acbasic" >
+    package="itesm.mx.acbasic">
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/acbasiclogo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -20,8 +20,9 @@
         <activity
             android:name=".ReadActivity"
             android:label="@string/title_activity_read"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".HelpActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
