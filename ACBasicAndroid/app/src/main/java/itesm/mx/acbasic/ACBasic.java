@@ -90,8 +90,8 @@ public class ACBasic implements ACBasicConstants {
                 e = new ParseException("Error: Procedimiento con incorrecto tipo de retorno en:" + detail);
                 throw e;
             case 11:
-                System.out.println("Error: Tamano del procedimiento imposible:" + detail);
-                e = new ParseException("Error: Tamano del procedimiento imposible:" + detail);
+                System.out.println("Error: Tamano de variable imposible:" + detail);
+                e = new ParseException("Error: Tamano de variable imposible:" + detail);
                 throw e;
             case 12:
                 System.out.println("Error: Index del arreglo no es entero:" + detail);
