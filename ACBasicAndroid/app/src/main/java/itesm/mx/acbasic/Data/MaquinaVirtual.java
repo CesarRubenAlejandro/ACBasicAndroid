@@ -6,6 +6,7 @@ import java.util.Stack;
 
 /**
  * Created by Cesar, Angela on 4/16/2016.
+ * Clase que ejecuta los codigos de operacion del compilador
  */
 public class MaquinaVirtual {
     private DirectorioProcedimientos directorioProcedimientos;
@@ -168,6 +169,12 @@ public class MaquinaVirtual {
         return "";
     }
 
+    /**
+     * Metodo para realizar la operacion de suma
+     * @param dirOp1 es la direccion del operando 1
+     * @param dirOp2 es la direccion del opreando 2
+     * @param dirRes es la direccion donde se guardara el valor de la operacion
+     */
     public void suma(int dirOp1, int dirOp2, int dirRes) {
         //traduce casos de direccionamiento indirecto
         dirOp1 = traduceDirIndirecto(dirOp1);
@@ -247,6 +254,12 @@ public class MaquinaVirtual {
         }
     }
 
+    /**
+     * Metodo para realizar la operacion de resta
+     * @param dirOp1 es la direccion del operando 1
+     * @param dirOp2 es la direccion del opreando 2
+     * @param dirRes es la direccion donde se guardara el valor de la operacion
+     */
     public void resta(int dirOp1, int dirOp2, int dirRes) {
         //traduce casos de direccionamiento indirecto
         dirOp1 = traduceDirIndirecto(dirOp1);
@@ -326,6 +339,12 @@ public class MaquinaVirtual {
         }
     }
 
+    /**
+     * Metodo para realizar la operacion de multiplicacion
+     * @param dirOp1 es la direccion del operando 1
+     * @param dirOp2 es la direccion del opreando 2
+     * @param dirRes es la direccion donde se guardara el valor de la operacion
+     */
     public void multiplica(int dirOp1, int dirOp2, int dirRes) {
         //traduce casos de direccionamiento indirecto
         dirOp1 = traduceDirIndirecto(dirOp1);
@@ -405,6 +424,12 @@ public class MaquinaVirtual {
         }
     }
 
+    /**
+     * Metodo para realizar la operacion de division
+     * @param dirOp1 es la direccion del operando 1
+     * @param dirOp2 es la direccion del opreando 2
+     * @param dirRes es la direccion donde se guardara el valor de la operacion
+     */
     public void divide(int dirOp1, int dirOp2, int dirRes) {
         //traduce casos de direccionamiento indirecto
         dirOp1 = traduceDirIndirecto(dirOp1);

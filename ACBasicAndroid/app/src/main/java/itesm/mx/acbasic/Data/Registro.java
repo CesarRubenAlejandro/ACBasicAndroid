@@ -3,11 +3,14 @@ package itesm.mx.acbasic.Data;
 import java.util.HashMap;
 
 /**
- * Created by Cesar on 4/16/2016.
+ * Clase que contiene el mapa de memoria para un procedimiento
  */
 public class Registro {
+    // mapa de memoria
     private HashMap<Integer,String> valores;
+    // id del procedimiento al que pertenece
     private int identificadorProcedimiento;
+    // direccion de cuadruplo al que debe regresar cuando se termine la ejecucion del procedimiento
     private int direccionRetorno;
 
     public Registro() {

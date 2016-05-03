@@ -25,13 +25,9 @@ public class DirectorioProcedimientos {
 		return nombrePrograma;
 	}
 
-
-
 	public void setNombrePrograma(String nombrePrograma) {
 		this.nombrePrograma = nombrePrograma;
 	}
-
-
 
 	public HashMap<String, Procedimiento> getProcedimientos() {
 		return procedimientos;
@@ -40,8 +36,6 @@ public class DirectorioProcedimientos {
 	public void setProcedimientos(HashMap<String, Procedimiento> procedimientos) {
 		this.procedimientos = procedimientos;
 	}
-
-
 
 	public HashMap<Integer, Constante> getConstantes() {
 		return constantes;
@@ -89,6 +83,11 @@ public class DirectorioProcedimientos {
 		return false;
 	}
 
+	/**
+	 * Metodo para obtener un objeto Constante en base a su valor en string
+	 * @param valorConstante es el valor de la constante en string
+	 * @return el objeto constante con ese valor
+	 */
 	public Constante getConstantePorValor(String valorConstante){
 		for (Integer key: this.constantes.keySet()){
 			if (this.constantes.get(key).getValorConstante().equals(valorConstante)){
