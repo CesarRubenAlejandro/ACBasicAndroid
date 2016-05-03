@@ -1327,9 +1327,30 @@ public class MaquinaVirtual {
      * @param direccionRead es la direccion donde se guarda el valor
      * @param valorLeido es el valor leido
      */
-    public void read ( int direccionRead, String valorLeido){
+    public void read ( int direccionRead, String valorLeido) throws Exception {
         //traduce casos de direccionamiento indirecto
         direccionRead = traduceDirIndirecto(direccionRead);
+        //revisar que la entrada leida sea del tipo debido
+        if(ManejadorMemoria.isInt(direccionRead)) {
+            //intentar convertir al tipo debido
+            int aux = Integer.parseInt(valorLeido);
+
+        } else if(ManejadorMemoria.isFloat(direccionRead)) {
+            //intentar convertir al tipo debido
+            double aux = Double.parseDouble(valorLeido);
+
+        } else if(ManejadorMemoria.isBool(direccionRead)) {
+            //revisar si es el tipo debido
+            if(!valorLeido.equals("true") && !valorLeido.equals("false")) {
+                throw new Exception();
+            }
+
+        } else if(ManejadorMemoria.isChar(direccionRead)) {
+            //convertir al tipo debido
+            valorLeido = Character.toString(valorLeido.charAt(0));
+
+        } //String no requiere revision
+
         // guardar el valor en la direccion de memoria correspondiente
         if (ManejadorMemoria.isGlobal(direccionRead)) {
             this.registroGlobal.guardaValor(direccionRead, valorLeido);

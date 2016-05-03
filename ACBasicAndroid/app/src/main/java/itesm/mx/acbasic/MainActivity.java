@@ -108,6 +108,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (savedInstanceState != null) {
+            codigoET.setText(savedInstanceState.getString("codigo"));
+            outputTV.setText(savedInstanceState.getString("output"));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString("codigo", codigoET.getText().toString());
+        savedInstanceState.putString("output", outputTV.getText().toString());
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
@@ -178,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
                 case Codigos.VERIFICAR:
                     if (!maquinaVirtual.verifica(matrizCuadruplos[instructionPointer][1], matrizCuadruplos[instructionPointer][3])){
-                        outputTV.append( Html.fromHtml("<font color=#cc0029> Array out of index </font>"));
+                        outputTV.append( Html.fromHtml("<font color=#cc0029> Indice de arreglo fuera de limite </font>"));
                         instructionPointer = contadorCuadruplos;
                     } else {
                         instructionPointer++;
@@ -289,10 +300,15 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode== REQUEST_CODE) && (resultCode==RESULT_OK)){
             Bundle datos = data.getExtras();
-            outputTV.append( Html.fromHtml("<br/> <font color=#008080>" + datos.getString("valor") + "</font>"));
-            maquinaVirtual.read(matrizCuadruplos[auxiliarInstructionPointer][3], datos.getString("valor"));
-            instructionPointer = auxiliarInstructionPointer + 1;
-            ejecutar();
+            outputTV.append(Html.fromHtml("<br/> <font color=#008080>" + datos.getString("valor") + "</font>"));
+            try {
+                maquinaVirtual.read(matrizCuadruplos[auxiliarInstructionPointer][3], datos.getString("valor"));
+                instructionPointer = auxiliarInstructionPointer + 1;
+                ejecutar();
+            } catch (Exception e) {
+                outputTV.append( Html.fromHtml("<font color=#cc0029> Tipo de dato incorrecto </font>"));
+                instructionPointer = contadorCuadruplos;
+            }
         }
     }
 }
