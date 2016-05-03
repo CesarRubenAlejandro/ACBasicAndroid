@@ -1,6 +1,8 @@
 package itesm.mx.acbasic.Data;
 
-
+/**
+ * Codigos para la generacion de cuadruplos y reconocimiento de tipos de datos
+ */
 public class Codigos {
 
 	public static final int ERROR = -1;

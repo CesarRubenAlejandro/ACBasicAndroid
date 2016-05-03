@@ -1,5 +1,8 @@
 package itesm.mx.acbasic.Data;
 
+/**
+ * Clase que contiene todas las posibles combinaciones semanticas del lenguaje
+ */
 public class CuboSemantico {
 	private int[][][] cubo;
 

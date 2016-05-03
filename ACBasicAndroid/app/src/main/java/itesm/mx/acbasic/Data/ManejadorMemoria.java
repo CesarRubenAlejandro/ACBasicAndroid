@@ -1,5 +1,8 @@
 package itesm.mx.acbasic.Data;
 
+/**
+ * Clase que asigna direcciones virtuales para cada tipo de dato
+ */
 public class ManejadorMemoria {
 
 	// variables
@@ -30,6 +33,11 @@ public class ManejadorMemoria {
 	private static int contadorGlobalString = 19000;
 	private static int contadorGlobalBool = 20000;
 
+	/**
+	 * Metodo para obtener una direccion de memoria virtual para variables locales
+	 * @param tipoVariable es el tipo de la variable que requiere memoria
+	 * @return direccion de memoria para el tipo de variable recibido
+	 */
 	public static int getMemoria(int tipoVariable) {
 		switch (tipoVariable) {
 			case Codigos.INT:
@@ -52,6 +60,11 @@ public class ManejadorMemoria {
 		}
 	}
 
+	/**
+	 * Metodo para obtener una direccion de memoria virtual para variables globales
+	 * @param tipoVariable es el tipo de la variable que requiere memoria
+	 * @return direccion de memoria para el tipo de variable recibido
+	 */
 	public static int getMemoriaGlobal(int tipoVariable) {
 		switch (tipoVariable) {
 			case Codigos.INT:
@@ -74,6 +87,11 @@ public class ManejadorMemoria {
 		}
 	}
 
+	/**
+	 * Metodo para obtener una direccion de memoria virtual para constantes
+	 * @param tipoVariable es el tipo de la variable que requiere memoria
+	 * @return direccion de memoria para el tipo de variable recibido
+	 */
 	public static int getMemoriaConstante(int tipoVariable) {
 		switch (tipoVariable) {
 			case Codigos.INT:
@@ -96,6 +114,11 @@ public class ManejadorMemoria {
 		}
 	}
 
+	/**
+	 * Metodo para obtener una direccion de memoria virtual para variables temporales
+	 * @param tipoVariable es el tipo de la variable que requiere memoria
+	 * @return direccion de memoria para el tipo de variable recibido
+	 */
 	public static int getMemoriaTemporal(int tipoVariable) {
 		switch (tipoVariable) {
 			case Codigos.INT:
@@ -118,6 +141,12 @@ public class ManejadorMemoria {
 		}
 	}
 
+	/**
+	 * Metodo para reajustar los contadores de memoria y separar las casillas para un arreglo
+	 * @param tipoArreglo es el tipo de variable
+	 * @param sizeArreglo es la cantidad de casillas a separar
+	 * @param dirBase es la direccion base del arreglo
+	 */
 	public static void separaMemoriaArreglo(int tipoArreglo, int sizeArreglo, int dirBase){
 		if(isGlobal(dirBase)) {
 			switch (tipoArreglo) {
@@ -150,47 +179,64 @@ public class ManejadorMemoria {
 
 	}
 
+	/**
+	 * Metodo para saber si una direccion es entera
+	 * @param dir es la direccion de la variable
+	 * @return true si es entera
+	 */
 	public static boolean isInt(int dir){
 		return isVarInt(dir) || isTempInt(dir) || isConsInt(dir);
 	}
 
-	public static boolean isFloat(int dir){
-		return isVarFloat(dir) || isTempFloat(dir) || isConsFloat(dir);
-	}
+	/**
+	 * Metodo para saber si una direccion es float
+	 * @param dir es la direccion de la variable
+	 * @return true si es float
+	 */
+	public static boolean isFloat(int dir){return isVarFloat(dir) || isTempFloat(dir) || isConsFloat(dir);}
 
-	public static boolean isChar(int dir){
-		return isVarChar(dir) || isTempChar(dir) || isConsChar(dir);
-	}
+	/**
+	 * Metodo para saber si una direccion es char
+	 * @param dir es la direccion de la variable
+	 * @return true si es char
+	 */
+	public static boolean isChar(int dir){return isVarChar(dir) || isTempChar(dir) || isConsChar(dir);}
 
-	public static boolean isString(int dir){
-		return isVarString(dir) || isTempString(dir) || isConsString(dir);
-	}
+	/**
+	 * Metodo para saber si una direccion es string
+	 * @param dir es la direccion de la variable
+	 * @return true si es string
+	 */
+	public static boolean isString(int dir){return isVarString(dir) || isTempString(dir) || isConsString(dir);}
 
-	public static boolean isBool(int dir){
-		return isVarBool(dir) || isTempBool(dir) || isConsBool(dir);
-	}
+	/**
+	 * Metodo para saber si una direccion es bool
+	 * @param dir es la direccion de la variable
+	 * @return true si es bool
+	 */
+	public static boolean isBool(int dir){return isVarBool(dir) || isTempBool(dir) || isConsBool(dir);}
 
+	/**
+	 * Metodo para saber si una direccion es global
+	 * @param dir es la direccion de la variable
+	 * @return true si es global
+	 */
 	public static boolean isGlobal(int dir) {
 		return (dir >= 16000 && dir < 21000);
 	}
-	public static boolean isConstante(int dir) {
-		return (dir >= 11000 && dir < 16000);
-	}
-	public static boolean isVarInt (int dir) {
-		return ((dir >= 1000 && dir < 2000) || (dir >= 16000 && dir < 17000));
-	}
-	public static boolean isVarFloat (int dir) {
-		return ((dir >= 2000 && dir < 3000) || (dir >= 17000 && dir < 18000));
-	}
-	public static boolean isVarChar (int dir) {
-		return ((dir >= 3000 && dir < 4000) || (dir >= 18000 && dir < 19000));
-	}
-	public static boolean isVarString (int dir) {
-		return ((dir >= 4000 && dir < 5000) || (dir >= 19000 && dir < 20000));
-	}
-	public static boolean isVarBool (int dir) {
-		return ((dir >= 5000 && dir < 6000) || (dir >= 20000 && dir < 21000));
-	}
+
+	/**
+	 * Metodo para saber si una direccion es constante
+	 * @param dir es la direccion de la variable
+	 * @return true si es constante
+	 */
+	public static boolean isConstante(int dir) {return (dir >= 11000 && dir < 16000);}
+
+	public static boolean isVarInt (int dir) {return ((dir >= 1000 && dir < 2000) || (dir >= 16000 && dir < 17000));}
+	public static boolean isVarFloat (int dir) {return ((dir >= 2000 && dir < 3000) || (dir >= 17000 && dir < 18000));}
+	public static boolean isVarChar (int dir) {return ((dir >= 3000 && dir < 4000) || (dir >= 18000 && dir < 19000));}
+	public static boolean isVarString (int dir) {return ((dir >= 4000 && dir < 5000) || (dir >= 19000 && dir < 20000));}
+	public static boolean isVarBool (int dir) {return ((dir >= 5000 && dir < 6000) || (dir >= 20000 && dir < 21000));}
 	public static boolean isTempInt (int dir) {
 		return (dir >= 6000 && dir < 7000);
 	}
@@ -206,7 +252,6 @@ public class ManejadorMemoria {
 	public static boolean isTempBool (int dir) {
 		return (dir >= 10000 && dir < 11000);
 	}
-
 	public static boolean isConsInt (int dir) {
 		return (dir >= 11000 && dir < 12000);
 	}

@@ -42,30 +42,22 @@ public class Procedimiento {
 	}
 
 
-
 	public Queue<ArrayList<Integer>> getFilaDireccionesLlamada() {
 		return filaDireccionesLlamada;
 	}
-
 
 
 	public void setFilaDireccionesLlamada(Queue<ArrayList<Integer>> filaDireccionesLlamada) {
 		this.filaDireccionesLlamada = filaDireccionesLlamada;
 	}
 
-
-
 	public ArrayList<Boolean> getIndicadorPorReferencia() {
 		return indicadorPorReferencia;
 	}
 
-
-
 	public void setIndicadorPorReferencia(ArrayList<Boolean> indicadorPorReferencia) {
 		this.indicadorPorReferencia = indicadorPorReferencia;
 	}
-
-
 
 	public ArrayList<Integer> getDireccionParametros() {
 		return direccionParametros;
@@ -75,8 +67,6 @@ public class Procedimiento {
 		this.direccionParametros = direccionParametros;
 	}
 
-
-
 	public int getIdentificadorProcedimiento() {
 		return identificadorProcedimiento;
 	}
@@ -84,8 +74,6 @@ public class Procedimiento {
 	public void setIdentificadorProcedimiento(int identificadorProcedimiento) {
 		this.identificadorProcedimiento = identificadorProcedimiento;
 	}
-
-
 
 	public String getNombreProcedimiento() {
 		return nombreProcedimiento;
@@ -127,14 +115,12 @@ public class Procedimiento {
 		this.tipoParams = tipoParams;
 	}
 
-
 	/**
 	 * Metodo para crear la tabla de variables del procedimiento actual
 	 */
 	public void crearTablaDeVariables(){
 		this.variables = new HashMap<String, Variable>();
 	}
-
 
 	/**
 	 * Metodo para dar de alta una variable en el directorio de variables del procedimiento actual
