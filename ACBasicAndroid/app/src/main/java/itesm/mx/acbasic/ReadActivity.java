@@ -9,10 +9,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * Actividad para procesar el input del usuario a traves de la operacion read
+ */
 public class ReadActivity extends AppCompatActivity {
     private Button buttonSubmit;
     private EditText inputET;
 
+    /**
+     * Metodo llamado cada vez que se crea la actividad
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

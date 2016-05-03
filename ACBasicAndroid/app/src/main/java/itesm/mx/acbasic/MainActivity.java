@@ -23,7 +23,9 @@ import itesm.mx.acbasic.Data.DirectorioProcedimientos;
 import itesm.mx.acbasic.Data.MaquinaVirtual;
 import itesm.mx.acbasic.Data.Procedimiento;
 
-
+/**
+ * Actividad principal de la app
+ */
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
     private int auxiliarInstructionPointer;
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private int contadorCuadruplos;
 
     @Override
+    /**
+     * Metodo ejecutado al iniciar la aplicacion
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -115,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    /**
+     * Metodo ejecutado cuando se cierra la actividad
+     */
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putString("codigo", codigoET.getText().toString());
         savedInstanceState.putString("output", outputTV.getText().toString());
@@ -143,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Metodo que lee todos los cuadruplos de compilacion y procesa las acciones a la maquina virtual
+     */
     public void ejecutar () {
         while (instructionPointer < contadorCuadruplos) {
             System.out.println(instructionPointer + ":" + matrizCuadruplos[instructionPointer][0] + " "
@@ -295,6 +306,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Metodo callback llamado cuando se regresa de la actividad de input
+     * @param requestCode es el codigo original de llamada
+     * @param resultCode es el codigo resultado
+     * @param data es la coleccion de datos enviada por la actividad de input
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
