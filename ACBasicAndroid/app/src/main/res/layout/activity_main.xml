@@ -6,10 +6,12 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
     android:orientation="horizontal"
     android:weightSum="1"
-    android:gravity="center">
+    android:gravity="center"
+    >
 
     <ScrollView
-        android:layout_width="240dp"
+        android:layout_width="0dp"
+        android:layout_weight=".45"
         android:layout_height="match_parent"
         android:id="@+id/scrollViewArriba"
         android:layout_alignParentEnd="true"
@@ -17,7 +19,7 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:inputType="textMultiLine"
             android:ems="10"
             android:fontFamily="serif"
@@ -32,13 +34,15 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="263dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".10"
         android:layout_gravity="center">
 
         <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".10"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:id="@+id/ejecBtn"
@@ -46,8 +50,9 @@
             android:layout_gravity="center" />
 
         <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".10"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:id="@+id/cleanBtn"
@@ -55,8 +60,9 @@
             android:layout_gravity="center" />
 
         <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".10"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:id="@+id/trashBtn"
@@ -64,8 +70,9 @@
             android:layout_gravity="center" />
 
         <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".10"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:id="@+id/helpBtn"
@@ -77,18 +84,18 @@
     </LinearLayout>
 
     <ScrollView
-        android:layout_width="240dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight=".45"
         android:id="@+id/scrollViewAbajo"
         android:fontFamily="sans-serif"
         android:layout_below="@+id/button"
         android:layout_centerHorizontal="true"
-        android:layout_weight="0.32"
         android:background="#ffffff"
         >
 
         <TextView
-            android:layout_width="240dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text=""
             android:id="@+id/output"
