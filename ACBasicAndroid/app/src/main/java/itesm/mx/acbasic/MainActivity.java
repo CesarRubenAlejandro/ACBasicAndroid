@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton bttnClean;
     private ImageButton bttnTrash;
     private ImageButton bttnHelp;
+    private ImageButton bttnTemplate;
     private EditText codigoET;
     private TextView outputTV;
     private ACBasic parser;
@@ -52,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
         bttnClean = (ImageButton)  findViewById(R.id.cleanBtn);
         bttnTrash = (ImageButton) findViewById(R.id.trashBtn);
         bttnHelp = (ImageButton) findViewById(R.id.helpBtn);
+        bttnTemplate = (ImageButton) findViewById(R.id.templateBtn);
         codigoET = (EditText) findViewById(R.id.codigoEntrada);
         outputTV = (TextView) findViewById(R.id.output);
+
 
         bttnCompilar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +102,23 @@ public class MainActivity extends AppCompatActivity {
                 outputTV.setText("");
             }
         });
+
+        bttnTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                codigoET.setText("program ejemplo;\n" +
+                        "\n" +
+                        "func void funcion1() {\n" +
+                        "\n" +
+                        "}\n" +
+                        "\n" +
+                        "main() {\n" +
+                        "\n" +
+                        "}");
+                outputTV.setText("");
+            }
+        });
+
 
         bttnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
