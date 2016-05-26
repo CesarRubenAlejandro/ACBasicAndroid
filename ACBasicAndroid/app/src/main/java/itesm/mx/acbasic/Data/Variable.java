@@ -2,8 +2,6 @@ package itesm.mx.acbasic.Data;
 
 /**
  * Clase que representa una variable del lenguaje ACBasic
- * @author Cesar, Angela
- *
  */
 public class Variable {
 	// nombre de la variable (ID)
@@ -22,16 +20,24 @@ public class Variable {
 		this.sizeVariable = 0;
 	}
 
+	/**
+	 * Metodo constructor
+	 * @param nombreVariable es el id de la variable
+	 * @param tipoVariable es el tipo de la variable
+	 * @param scope puede ser local o global
+	 */
 	public Variable(String nombreVariable, int tipoVariable, String scope) {
 		super();
 		this.nombreVariable = nombreVariable;
 		this.tipoVariable = tipoVariable;
 		this.scope = scope;
+		// en caso que la variable sea global, se le asigna una direccion de tipo global
 		if (this.scope.equals("global")){
 			this.direccionVariable = ManejadorMemoria.getMemoriaGlobal(tipoVariable);
 		} else {
 			this.direccionVariable = ManejadorMemoria.getMemoria(tipoVariable);
 		}
+		// por default todas las variables tienen size 0
 		this.sizeVariable = 0;
 	}
 
@@ -67,6 +73,10 @@ public class Variable {
 		return sizeVariable;
 	}
 
+	/**
+	 * Metodo set para el atributo sizeVariable
+	 * @param sizeVariable es el tamano de la variable
+	 */
 	public void setSizeVariable(int sizeVariable) {
 		this.sizeVariable = sizeVariable;
 		// reservar memoria para las cada casilla del arreglo

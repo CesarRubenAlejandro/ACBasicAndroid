@@ -1,8 +1,14 @@
 package itesm.mx.acbasic.Data;
 
+/**
+ * Clase que representa una constante del lenguaje ACBasic
+ */
 public class Constante {
+	// tipo de dato de la constante
 	private int tipoConstante;
+	// direccion virtual de la constante
 	private int direccionConstante;
+	// valor en string de la constante
 	private String valorConstante;
 	
 	public Constante(int tipoConstante, int direccionConstante, String valorConstante) {

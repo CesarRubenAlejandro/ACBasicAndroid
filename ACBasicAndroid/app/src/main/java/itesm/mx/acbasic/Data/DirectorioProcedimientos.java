@@ -3,9 +3,7 @@ package itesm.mx.acbasic.Data;
 import java.util.HashMap;
 
 /**
- * Clase que representa la tabla de procedimientos de un programa 
- * @author Cesar, Angela
- *
+ * Clase que contiene la tabla de procedimientos de un programa asi como la tabla de constantes
  */
 public class DirectorioProcedimientos {
 	// mapa que guarda todos los procedimientos. 

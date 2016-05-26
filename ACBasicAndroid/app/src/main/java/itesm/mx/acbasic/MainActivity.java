@@ -28,6 +28,7 @@ import itesm.mx.acbasic.Data.Procedimiento;
  */
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
+    // guarda el valor del IP antes de realizar la operacion de read oara despues reanudar la ejecucion de cuadruplos
     private int auxiliarInstructionPointer;
 
     private ImageButton bttnCompilar;
@@ -39,11 +40,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView outputTV;
     private ACBasic parser;
 
+    // codigo intermedio creado por el analizador
     private int[][] matrizCuadruplos;
+    // apuntador a la instruccion a ejecutar
     private int instructionPointer;
     private DirectorioProcedimientos dirProcedimientos;
-    private Stack<Integer> pilaInstrucciones;
+    // objeto maquina virtual
     private MaquinaVirtual maquinaVirtual;
+    // cantidad de cuadruplos generados por el analizador
     private int contadorCuadruplos;
 
     @Override
@@ -81,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
                     matrizCuadruplos = parser.getMatrizCuadruplos();
                     contadorCuadruplos = parser.getContadorCuadruplo();
                     instructionPointer = 0;
-                    pilaInstrucciones = new Stack<Integer>();
                     maquinaVirtual = new MaquinaVirtual(dirProcedimientos);
                     outputTV.setText("");
                     ejecutar();

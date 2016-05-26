@@ -7,8 +7,6 @@ import java.util.Queue;
 
 /**
  * Clase que representa un procedimiento (func) del lenguaje ACBasic
- * @author Cesar, Angela
- *
  */
 public class Procedimiento {
 	// nombre (id) del procedimiento
@@ -146,11 +144,14 @@ public class Procedimiento {
 	/**
 	 * Metodo para comparar los parametros de una llamada con los parametros
 	 * esperados en la funcion
+	 * @param paramLlamada es una lista con los tipos de los parametros en la funcion
 	 */
 	public boolean comparaParams(ArrayList <Integer> paramLlamada) {
+		// los parametros enviados deben ser el mismo numero que los que declaro la funcion
 		if(paramLlamada.size() != this.getCantidadParametros()) {
 			return false;
 		}
+		// los tipos de los parametros deben coincidir con los declarados
 		for(int i=0; i<paramLlamada.size(); i++){
 			if (paramLlamada.get(i)!= this.tipoParams.get(i)){
 				return false;

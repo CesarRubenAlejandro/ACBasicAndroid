@@ -5,14 +5,17 @@ import android.util.MalformedJsonException;
 import java.util.Stack;
 
 /**
- * Created by Cesar, Angela on 4/16/2016.
  * Clase que ejecuta los codigos de operacion del compilador
  */
 public class MaquinaVirtual {
     private DirectorioProcedimientos directorioProcedimientos;
+    // registro de memoria que contiene las variables globales y siempre esta activo
     private Registro registroGlobal;
+    // registros de memoria activados, solamente el tope esta 'vivo'
     private Stack<Registro> pilaRegistros;
+    // variable auxiliar que se usa para guardar el valor de retorno de una funcion mientras se asigna al temporal en donde se llamo
     private String valorRetorno;
+    // pila de registros utilizada para manejar llamadas anidadas a funciones
     private Stack<Registro> pilaEras;
 
     public MaquinaVirtual(DirectorioProcedimientos directorioProcedimientos) {
